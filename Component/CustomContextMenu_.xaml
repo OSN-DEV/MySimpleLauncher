@@ -1,0 +1,13 @@
+﻿<Window x:Class="MySimpleLauncher.Component.CustomContextMenu_"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MySimpleLauncher.Component"
+        mc:Ignorable="d"
+        Title="CustomContextMenu" Height="200" Width="150" Deactivated="Window_Deactivated" 
+        AllowsTransparency="True" Background="White"
+        SizeToContent="WidthAndHeight"  ShowInTaskbar="False" WindowStyle="None" 
+        BorderBrush="#FFBDBDBD" ResizeMode="NoResize" BorderThickness="1" FontFamily="Meiryo UI">
+    <StackPanel Orientation="Vertical" Name="cContainer" />
+</Window>

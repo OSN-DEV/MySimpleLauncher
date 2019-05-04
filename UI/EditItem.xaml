@@ -1,0 +1,220 @@
+﻿<Window x:Class="MySimpleLauncher.UI.EditItem"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MySimpleLauncher.UI"
+        xmlns:u="clr-namespace:MySimpleLauncher.Component"
+        mc:Ignorable="d"
+        Title="ItemData" Height="470" Width="400" WindowStartupLocation="CenterOwner" SizeToContent="Height" ShowInTaskbar="False" Loaded="Window_Loaded" >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/MySimpleLauncher;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="u:CustomTextBox" BasedOn="{StaticResource BaseTextBoxStyle}">
+                <Setter Property="IsReadOnly"  Value="{Binding IsReadOnly}" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="410"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+            <TabItem Header="General">
+                <Grid Margin="10" FocusManager.FocusedElement="{Binding ElementName=cDisplayName}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition  />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Grid.Column="0" Background="Silver" Width="42" Height="42" HorizontalAlignment="Left" Margin="0,0,0,5" MouseDown="Icon_MouseDown" Cursor="Hand">
+                        <!--<Image Width="40" Height="40" Name="cIcon" />-->
+                        <Image Width="40" Height="40" Name="cIcon" Source="{Binding Icon,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <TextBlock       Grid.Column="0" Grid.Row="1" Text="Display Name"/>
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="1" Text="{Binding DisplayName,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="20" Width="200" x:Name="cDisplayName" TextChanged="DisplayName_TextChanged"/>
+
+                    <TextBlock       Grid.Column="0" Grid.Row="2" Text="Path"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="2" Text="{Binding FilePath,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="256" HorizontalAlignment="Stretch" TextValueChanged="FilePath_TextValueChanged" x:Name="cFilePath"/>
+
+                    <TextBlock       Grid.Column="0" Grid.Row="3" Text="User"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="3" Text="{Binding User,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="20" Width="200"  />
+
+                    <TextBlock       Grid.Column="0" Grid.Row="4" Text="Password"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="4" Text="{Binding Password,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="20" Width="200"  />
+
+                    <TextBlock       Grid.Column="0" Grid.Row="5" Text="Comment" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="5" Text="{Binding Comment,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="WrapWithOverflow" MaxLines="3" MinLines="3" MaxLength="200" HorizontalAlignment="Stretch" Height="50"  />
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="Account">
+                <ScrollViewer>
+                <Grid Margin="10" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock       Grid.Column="0" Grid.Row="1" Text="Id" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="1" Text="{Binding UserId,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="20" Width="200"/>
+
+                    <TextBlock Text="Name" Grid.Column="0" Grid.Row="2" />
+                    <Grid Grid.Column="2" Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="2" />
+                            <ColumnDefinition Width="* "/>
+                        </Grid.ColumnDefinitions>
+                        <u:CustomTextBox Grid.Column="0" Text="{Binding LastName,UpdateSourceTrigger=PropertyChanged}" MaxLength="10" Width="90" ImeMode="Hiragana" />
+                        <u:CustomTextBox Grid.Column="2" Text="{Binding FirstName,UpdateSourceTrigger=PropertyChanged}" MaxLength="10" Width="90" />
+                        <!--<u:CustomTextBox Grid.Column="2" Text="AAAAABBBBB" MaxLength="10" Width="90"/>-->
+                    </Grid>
+
+                    <TextBlock       Grid.Column="0" Grid.Row="3" Text="Mail"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="3" Text="{Binding Mail,UpdateSourceTrigger=PropertyChanged}" MaxLength="128" HorizontalAlignment="Stretch" ImeMode="Disabled" />
+
+                    <TextBlock       Grid.Column="0" Grid.Row="4" Text="Birthday"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="4" Text="{Binding Birthday,UpdateSourceTrigger=PropertyChanged}" MaxLength="10" Width="80" ImeMode="Disabled"  />
+                    <!--<TextBox   Grid.Column="2" Grid.Row="4" Text="9999/99/99" MaxLength="10" Width="80"/>-->
+
+                    <TextBlock Grid.Column="0" Grid.Row="5" Text="Zip Code"  />
+                    <u:CustomTextBox   Grid.Column="2" Grid.Row="5" Text="{Binding ZipCode,UpdateSourceTrigger=PropertyChanged}" MaxLength="8" Width="70" ImeMode="Disabled"  />
+
+                    <TextBlock Grid.Column="0" Grid.Row="6" Text="Prefecture"  />
+                    <u:CustomTextBox   Grid.Column="2" Grid.Row="6" Text="{Binding Prefecture,UpdateSourceTrigger=PropertyChanged}" MaxLength="4" Width="55" ImeMode="Hiragana" />
+                    <!--<u:CustomTextBox   Grid.Column="2" Grid.Row="5" Text="神奈川県" MaxLength="4" Width="55" ImeMode="Hiragana" />-->
+
+                    <TextBlock       Grid.Column="0" Grid.Row="7" Text="Address1"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="7" Text="{Binding Address1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch"  />
+
+                    <TextBlock       Grid.Column="0" Grid.Row="8" Text="Address2"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="8" Text="{Binding Address2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <TextBlock       Grid.Column="0" Grid.Row="9" Text="Tel"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="9" Text="{Binding Tel,UpdateSourceTrigger=PropertyChanged}" ImeMode="Disabled" MaxLength="15" Width="100" />
+                    <!--<u:CustomTextBox Grid.Column="2" Grid.Row="9" Text="090-3391-6248" ImeMode="Disabled" MaxLength="15" Width="100" />-->
+
+                    <TextBlock       Grid.Column="0" Grid.Row="10" Text="Secret QA1"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="10" Text="{Binding SecretQuestion1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="11" Text="{Binding SecretAnswer1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <TextBlock       Grid.Column="0" Grid.Row="12" Text="Secret QA2"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="12" Text="{Binding SecretQuestion2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="13" Text="{Binding SecretAnswer2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <TextBlock       Grid.Column="0" Grid.Row="14" Text="Secret QA3"  />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="14" Text="{Binding SecretQuestion3,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="15" Text="{Binding SecretAnswer3,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Others">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="0" Text="{Binding UserKey1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <!--<u:CustomTextBox Grid.Column="0" Grid.Row="0" Text="あああああいいいいい" ImeMode="Off" MaxLength="30" Width="120" />-->
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="0" Text="{Binding UserValue1,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="1" Text="{Binding UserKey2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="1" Text="{Binding UserValue2,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="2" Text="{Binding UserKey3,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="2" Text="{Binding UserValue3,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="3" Text="{Binding UserKey4,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="3" Text="{Binding UserValue4,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="4" Text="{Binding UserKey5,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="4" Text="{Binding UserValue5,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="5" Text="{Binding UserKey6,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="5" Text="{Binding UserValue6,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="6" Text="{Binding UserKey7,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="6" Text="{Binding UserValue7,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="7" Text="{Binding UserKey8,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="7" Text="{Binding UserValue8,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="8" Text="{Binding UserKey9,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="8" Text="{Binding UserValue9,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                    <u:CustomTextBox Grid.Column="0" Grid.Row="9" Text="{Binding UserKey10,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="30" Width="120" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="9" Text="{Binding UserValue10,UpdateSourceTrigger=PropertyChanged}" MaxLength="100" HorizontalAlignment="Stretch" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Content="Edit" Style="{StaticResource LabelButton}" Name="cEdit" Click="Edit_Click"/>
+            <Button Grid.Column="2" Content="OK" Style="{StaticResource LabelButton}" Name="cOK" IsDefault="True" Click="Ok_Click"/>
+            <Button Grid.Column="3" Content="Cancel" Style="{StaticResource LabelButton}" Name="cCancel" IsCancel="True"/>
+        </Grid>
+    </Grid>
+</Window>
