@@ -1,61 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyLib.Data.Sqlite;
+﻿using MyLib.Data.Sqlite;
+using MySimpleLauncher.Component;
 using MySimpleLauncher.Model;
 using System.Windows.Media.Imaging;
-using MySimpleLauncher.Component;
 
 namespace MySimpleLauncher.Data {
     internal class ItemsTable : TableBase {
 
         #region Declaration
-        public long Id { set; get; }
-        public long CategoryId { set; get; }
-        public string DisplayName { set; get; }
-        public BitmapImage Icon { set; get; }
-        public string FilePath { set; get; }
-        public string User { set; get; }
-        public string Password { set; get; }
-        public string Comment { set; get; }
-        public string UserId { set; get; }
-        public string FirstName { set; get; }
-        public string LastName { set; get; }
-        public string Mail { set; get; }
-        public string Birthday { set; get; }
-        public string ZipCode { set; get; }
-        public string Prefecture { set; get; }
-        public string Address1 { set; get; }
-        public string Address2 { set; get; }
-        public string SecretQuestion1 { set; get; }
-        public string SecretAnswer1 { set; get; }
-        public string SecretQuestion2 { set; get; }
-        public string SecretAnswer2 { set; get; }
-        public string SecretQuestion3 { set; get; }
-        public string SecretAnswer3 { set; get; }
-        public string UserKey1 { set; get; }
-        public string UserValue1 { set; get; }
-        public string UserKey2 { set; get; }
-        public string UserValue2 { set; get; }
-        public string UserKey3 { set; get; }
-        public string UserValue3 { set; get; }
-        public string UserKey4 { set; get; }
-        public string UserValue4 { set; get; }
-        public string UserKey5 { set; get; }
-        public string UserValue5 { set; get; }
-        public string UserKey6 { set; get; }
-        public string UserValue6 { set; get; }
-        public string UserKey7 { set; get; }
-        public string UserValue7 { set; get; }
-        public string UserKey8 { set; get; }
-        public string UserValue8 { set; get; }
-        public string UserKey9 { set; get; }
-        public string UserValue9 { set; get; }
-        public string UserKey10 { set; get; }
-        public string UserValue10 { set; get; }
-        public int RowOrder { set; get; }
+        internal long Id { set; get; }
+        internal long CategoryId { set; get; }
+        internal string DisplayName { set; get; }
+        internal BitmapImage Icon { set; get; }
+        internal string FilePath { set; get; }
+        internal string User { set; get; }
+        internal string Password { set; get; }
+        internal string Comment { set; get; }
+        internal string UserId { set; get; }
+        internal string FirstName { set; get; }
+        internal string LastName { set; get; }
+        internal string Mail { set; get; }
+        internal string Birthday { set; get; }
+        internal string ZipCode { set; get; }
+        internal string Prefecture { set; get; }
+        internal string Address1 { set; get; }
+        internal string Address2 { set; get; }
+        internal string SecretQuestion1 { set; get; }
+        internal string SecretAnswer1 { set; get; }
+        internal string SecretQuestion2 { set; get; }
+        internal string SecretAnswer2 { set; get; }
+        internal string SecretQuestion3 { set; get; }
+        internal string SecretAnswer3 { set; get; }
+        internal string UserKey1 { set; get; }
+        internal string UserValue1 { set; get; }
+        internal string UserKey2 { set; get; }
+        internal string UserValue2 { set; get; }
+        internal string UserKey3 { set; get; }
+        internal string UserValue3 { set; get; }
+        internal string UserKey4 { set; get; }
+        internal string UserValue4 { set; get; }
+        internal string UserKey5 { set; get; }
+        internal string UserValue5 { set; get; }
+        internal string UserKey6 { set; get; }
+        internal string UserValue6 { set; get; }
+        internal string UserKey7 { set; get; }
+        internal string UserValue7 { set; get; }
+        internal string UserKey8 { set; get; }
+        internal string UserValue8 { set; get; }
+        internal string UserKey9 { set; get; }
+        internal string UserValue9 { set; get; }
+        internal string UserKey10 { set; get; }
+        internal string UserValue10 { set; get; }
+        internal int RowOrder { set; get; }
         #endregion
 
         #region Constructor
@@ -128,6 +123,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",user_key10       TEXT")
                 .AppendSql(",user_value10     TEXT")
                 .AppendSql(",row_order        INTEGER")
+                .AppendSql(",search_keyword   TEXT")
                 .AppendSql(")");
             return sql;
         }
@@ -184,6 +180,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",user_key10")
                 .AppendSql(",user_value10")
                 .AppendSql(",row_order")
+                .AppendSql(",search_keyword")
                 .AppendSql(")")
                 .AppendSql("VALUES")
                 .AppendSql("(")
@@ -230,6 +227,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",@user_key10")
                 .AppendSql(",@user_value10")
                 .AppendSql(",@row_order")
+                .AppendSql(",@search_keyword")
                 .AppendSql(")");
             var paramList = new ParameterList();
             paramList.Add("@category_id", model.CategoryId);
@@ -275,12 +273,10 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@user_key10", model.UserKey10);
             paramList.Add("@user_value10", model.UserValue10);
             paramList.Add("@row_order", model.RowOrder);
+            paramList.Add("@search_keyword", model.GetSearchKeyword());
 
-            var id = -1L;
             this.OpenDatabase();
-            id = base.Database.Insert(sql, paramList);
-
-            return id;
+            return base.Database.Insert(sql, paramList);
         }
 
         /// <summary>
@@ -334,6 +330,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",user_key10 = @user_key10")
                 .AppendSql(",user_value10 = @user_value10")
                 .AppendSql(",row_order = @row_order")
+                .AppendSql(",search_keyword = @search_keyword")
                 .AppendSql("WHERE id = @id");
 
             var paramList = new ParameterList();
@@ -381,6 +378,7 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@user_key10", model.UserKey10);
             paramList.Add("@user_value10", model.UserValue10);
             paramList.Add("@row_order", model.RowOrder);
+            paramList.Add("@search_keyword", model.GetSearchKeyword());
 
             this.OpenDatabase();
             return base.Database.ExecuteNonQuery(sql, paramList);
@@ -417,14 +415,9 @@ namespace MySimpleLauncher.Data {
                 .AppendSql("WHERE id = @id");
             var paramList = new ParameterList();
             paramList.Add("@id", id);
-            var count = 0;
             this.OpenDatabase();
-            count = base.Database.ExecuteNonQuery(sql, paramList);
-            return count;
+            return base.Database.ExecuteNonQuery(sql, paramList);
         }
-
-
-
 
         /// <summary>
         /// update category id by category id
@@ -442,7 +435,6 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@old_category_id", oldCateogryId);
             return base.Database.ExecuteNonQuery(sql, paramList);
         }
-
 
         /// <summary>
         /// delete by id

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MySimpleLauncher.Data;
+﻿using MySimpleLauncher.Data;
 
 namespace MySimpleLauncher.Model {
     internal class ProfileModel {
@@ -24,7 +19,6 @@ namespace MySimpleLauncher.Model {
             this.DisplayName = table.DisplayName;
             this.RowOrder = table.RowOrder;
         }
-            
         #endregion
     }
 }

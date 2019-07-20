@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyLib.Data.Sqlite;
+﻿using MyLib.Data.Sqlite;
 using MySimpleLauncher.Model;
 
 namespace MySimpleLauncher.Data {
+    /// <summary>
+    /// category table controller
+    /// </summary>
     internal class CategoriesTable : TableBase {
-
         #region Declaration
-        public long Id { set; get; }
-        public string DisplayName { set; get; }
-        public int RowOrder { set; get; }
+        internal long Id { set; get; }
+        internal string DisplayName { set; get; }
+        internal int RowOrder { set; get; }
         #endregion
 
         #region Constructor
-        public CategoriesTable(Database database) {
+        internal CategoriesTable(Database database) {
             base.Database = database;
         }
         #endregion
@@ -69,12 +66,8 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@display_name", model.DisplayName);
             paramList.Add("@row_order", model.RowOrder);
 
-            var id = -1L;
-
             this.OpenDatabase();
-            id = base.Database.Insert(sql, paramList);
-
-            return id;
+            return base.Database.Insert(sql, paramList);
         }
 
         /// <summary>

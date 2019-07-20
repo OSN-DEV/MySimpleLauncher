@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MySimpleLauncher.UI"
         xmlns:u="clr-namespace:MySimpleLauncher.Component"
         mc:Ignorable="d"
-        Title="プロファイル名設定" Height="150" Width="300" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" SizeToContent="Height" Activated="Window_Activated" >
+        Title="プロファイル名設定" Height="120" Width="300" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" SizeToContent="Height" Activated="Window_Activated" >
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

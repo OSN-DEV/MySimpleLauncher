@@ -1,20 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MySimpleLauncher.Model;
-using MySimpleLauncher.Data;
+﻿using MySimpleLauncher.Model;
 using System.Collections.ObjectModel;
-using MyLib.Data.Sqlite;
+using System.Windows;
 
 namespace MySimpleLauncher.UI {
     /// <summary>
@@ -63,7 +49,6 @@ namespace MySimpleLauncher.UI {
             this.DialogResult = true;
         }
 
-
         private void DeleteItems_Checked(object sender, RoutedEventArgs e) {
             if (null != cCategoryList) {
                 this.cCategoryList.IsEnabled = !(true == this.cDeleteItems.IsChecked ? true : false);
@@ -87,6 +72,5 @@ namespace MySimpleLauncher.UI {
             this.cCategoryList.IsEnabled = false;
         }
         #endregion
-
     }
 }

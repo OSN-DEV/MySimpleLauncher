@@ -144,12 +144,25 @@ namespace MySimpleLauncher.Model {
         }
         #endregion
 
+        #region Internal Method
+        internal string GetSearchKeyword() {
+            var keyword = new System.Text.StringBuilder();
+            keyword.Append(this.DisplayName)
+                .Append(this.FilePath)
+                .Append(this.User)
+                .Append(this.Comment)
+                .Append(this.UserId)
+                .Append(this.FirstName)
+                .Append(this.LastName)
+                .Append(this.Mail);
+            return keyword.ToString();
+        }
+        #endregion
+
         #region Protecte Method
         protected void OnPropertyChanged(string name) {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
+            handler?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         #endregion
     }

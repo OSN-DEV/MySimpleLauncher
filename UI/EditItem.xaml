@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MySimpleLauncher.UI"
         xmlns:u="clr-namespace:MySimpleLauncher.Component"
         mc:Ignorable="d"
-        Title="ItemData" Height="470" Width="400" WindowStartupLocation="CenterOwner" SizeToContent="Height" ShowInTaskbar="False" Loaded="Window_Loaded" >
+        Title="ItemData" Height="490" Width="400" WindowStartupLocation="CenterOwner" SizeToContent="Height" ShowInTaskbar="False" Loaded="Window_Loaded" >
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,7 +20,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="410"/>
+            <RowDefinition Height="430"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 

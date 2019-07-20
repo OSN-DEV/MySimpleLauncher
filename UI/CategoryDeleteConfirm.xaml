@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MySimpleLauncher.UI"
         mc:Ignorable="d"
-        Title="カテゴリ削除確認" Height="500" Width="300" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" SizeToContent="Height" >
+        Title="カテゴリ削除確認" Height="360" Width="325" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" SizeToContent="Height" >
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

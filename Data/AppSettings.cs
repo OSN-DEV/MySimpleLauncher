@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyLib.Data;
+﻿using MyLib.Data;
 using MySimpleLauncher.Util;
 
 namespace MySimpleLauncher.Data {
@@ -12,15 +7,13 @@ namespace MySimpleLauncher.Data {
         public long CurrentProfileId { set; get; } = -1;
         public int CategoryListSelectedIndex { set; get; } = -1;
 
-        private string _settingFile = AppCommon.GetAppPath() + @"\app.settings";
-        #endregion
-
-        #region Constructor
-        public AppSettings() {
-        }
+        private readonly string _settingFile = AppCommon.GetAppPath() + @"\app.settings";
         #endregion
 
         #region Public Method
+        /// <summary>
+        /// load settings
+        /// </summary>
         public void Load() {
             var instance = GetInstance().LoadFromXml(this._settingFile);
             if (null != instance) {
@@ -28,10 +21,13 @@ namespace MySimpleLauncher.Data {
                 this.CategoryListSelectedIndex = instance.CategoryListSelectedIndex;
             }
         }
+
+        /// <summary>
+        /// save settings
+        /// </summary>
         public void Save() {
             GetInstance().SaveToXml(this._settingFile, this);
         }
         #endregion
-
     }
 }

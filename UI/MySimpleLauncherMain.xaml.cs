@@ -209,8 +209,8 @@ namespace MySimpleLauncher.UI {
                 using (var table = new ProfilesTable()) {
                     table.SelectById(this._settings.CurrentProfileId);
                     if (table.Read()) {
+                        this._currentProfile = new ProfileModel(table);
                         if (System.IO.File.Exists(table.FilePath)) {
-                            this._currentProfile = new ProfileModel(table);
                             this.cProfileList.Content = this._currentProfile.DisplayName;
                             this._profileDatabase = new Database(table.FilePath);
 
@@ -383,6 +383,10 @@ namespace MySimpleLauncher.UI {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CategoryList_ContextMenuOpening(object sender, ContextMenuEventArgs e) {
+            if (!this._categoryMenu.IsEnabled) {
+                e.Handled = true;
+                return;
+            }
             var model = this.cCategoryList.GetItemAt(Mouse.GetPosition(this.cCategoryList));
             var isItemSelected = (null != model);
             this._categoryMenu.SetMenuItemEnabled((int)ContextMenuId.Edit, isItemSelected);
@@ -576,8 +580,6 @@ namespace MySimpleLauncher.UI {
                 item.Click += handler;
                 if (isDelete) {
                     item.ForeGround = "#FF0000";
-                    item.MouseOverColor = "#FF9999";
-                    item.PressedColor = "#FF0000";
                 }
                 return item;
             }
@@ -585,7 +587,7 @@ namespace MySimpleLauncher.UI {
             this._categoryMenu.AddItem(CreateItem((int)ContextMenuId.Add, "Add", CategoryContextMenuAdd_Click));
             this._categoryMenu.AddItem(CreateItem((int)ContextMenuId.Edit, "Edit", CategoryContextMenuEdit_Click));
             this._categoryMenu.AddSeparator();
-            this._categoryMenu.AddItem(CreateItem((int)ContextMenuId.Delete, "Delete", CategoryContextMenuDelete_Click));
+            this._categoryMenu.AddItem(CreateItem((int)ContextMenuId.Delete, "Delete", CategoryContextMenuDelete_Click, true));
 
             this._itemMenu.AddItem(CreateItem((int)ContextMenuId.Add, "Add", ItemContextMenuAdd_Click));
             this._itemMenu.AddItem(CreateItem((int)ContextMenuId.Edit, "Edit", ItemContextMenuEdit_Click));
