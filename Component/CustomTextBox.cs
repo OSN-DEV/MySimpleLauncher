@@ -54,7 +54,7 @@ namespace MySimpleLauncher.Component {
         private void CustomTextBox_LostFocus(object sender, RoutedEventArgs e) {
             if (this._text != this.Text) {
                 if (null != this.TextValueChanged) {
-                    this.TextValueChanged(this, EventArgs.Empty);
+                    TextValueChanged(this, EventArgs.Empty);
                 }
             }
         }

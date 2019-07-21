@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Net;
 
 namespace MySimpleLauncher.Util {
     internal class AppCommon {
@@ -39,12 +40,7 @@ namespace MySimpleLauncher.Util {
             var bitmapImage = new BitmapImage();
             try {
                 using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read)) {
-                    bitmapImage.BeginInit();
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.CreateOptions = BitmapCreateOptions.None;
-                    bitmapImage.StreamSource = stream;
-                    bitmapImage.EndInit();
-                    bitmapImage.Freeze();
+                    bitmapImage = GetBitmapImage(stream);
                 }
             } catch  {
                 bitmapImage = null;
@@ -60,18 +56,29 @@ namespace MySimpleLauncher.Util {
         public static BitmapImage GetBitmapImage(byte[] data) {
             var bitmapImage = new BitmapImage();
             try {
-                using (var starem = new MemoryStream(data)) {
-                    starem.Seek(0, SeekOrigin.Begin);
-                    bitmapImage.BeginInit();
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.CreateOptions = BitmapCreateOptions.None;
-                    bitmapImage.StreamSource = starem;
-                    bitmapImage.EndInit();
-                    bitmapImage.Freeze();
+                using (var stream = new MemoryStream(data)) {
+                    stream.Seek(0, SeekOrigin.Begin);
+                    bitmapImage = GetBitmapImage(stream);
                 }
             } catch {
                 bitmapImage = null;
             }
+            return bitmapImage;
+        }
+
+        /// <summary>
+        /// get BitmapImage from stream
+        /// </summary>
+        /// <param name="stream">stream</param>
+        /// <returns>BitmapImage</returns>
+        public static BitmapImage GetBitmapImage(Stream stream) {
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+            bitmapImage.CreateOptions = BitmapCreateOptions.None;
+            bitmapImage.StreamSource = stream;
+            bitmapImage.EndInit();
+            bitmapImage.Freeze();
             return bitmapImage;
         }
     }

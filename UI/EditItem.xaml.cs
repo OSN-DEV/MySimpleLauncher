@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using System.IO;
+using System.Net;
 
 namespace MySimpleLauncher.UI {
     /// <summary>
@@ -19,11 +21,14 @@ namespace MySimpleLauncher.UI {
 
         internal ItemModel Model { get { return this._model; } }
 
+        System.Windows.Forms.WebBrowser _browser = new System.Windows.Forms.WebBrowser();
+        private bool _loadingIcon = false;
         #endregion
 
         #region Constructor
         private EditItem() {
             InitializeComponent();
+            this._browser.DocumentCompleted += Browser_DocumentCompleted;
         }
 
         internal EditItem(Window owner, bool isReadOnly = false, ItemModel model = null) : this() {
@@ -39,6 +44,7 @@ namespace MySimpleLauncher.UI {
             this.cOK.Visibility = isReadOnly ? Visibility.Hidden : Visibility.Visible;
             this.cOK.IsEnabled = (0 < this._model.DisplayName?.Length);
             this.DataContext = this._model;
+            
         }
         #endregion
 
@@ -67,11 +73,15 @@ namespace MySimpleLauncher.UI {
                 return;
             }
 
-            if (0 < this.cFilePath.Text.Length && System.IO.File.Exists(this.cFilePath.Text)) {
+            if (0 < this.cFilePath.Text.Length && this.cFilePath.Text.StartsWith("http")) {
+                if (!this._loadingIcon) {
+                    this._loadingIcon = true;
+                    this._browser.Navigate(this.cFilePath.Text);
+                }
+            } else if (0 < this.cFilePath.Text.Length && System.IO.File.Exists(this.cFilePath.Text)) {
                 using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(this.cFilePath.Text)) {
                     this.cIcon.Source = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 }
-            } else {
             }
         }
 
@@ -86,9 +96,49 @@ namespace MySimpleLauncher.UI {
             }
             this.cIcon.Source = AppCommon.GetBitmapImage(dialog.FileName);
         }
+
+        private  void Browser_DocumentCompleted(object sender, System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e) {
+            if (e.Url.AbsolutePath != (sender as System.Windows.Forms.WebBrowser).Url.AbsolutePath) { 
+                return;
+            }
+            string iconUrl = "";
+            foreach (System.Windows.Forms.HtmlElement linkTag in this._browser.Document.GetElementsByTagName("link")) {
+                string relAttribute = linkTag.GetAttribute("rel");
+                string url;
+                if (relAttribute == "shortcut icon" || relAttribute == "icon") {
+                    url = linkTag.GetAttribute("href");
+                    if (url.StartsWith("http")) {        //完全なURLの場合
+                        iconUrl = url;
+                    } else if (url.StartsWith("/")) {    //絶対パスの場合
+                        //iconUrl = "http://" + e.Url.Host + url;
+                        iconUrl = e.Url.Scheme + "://" + e.Url.Host + url;
+                    } else {                                //相対パスの場合
+                        iconUrl = e.Url.ToString() + url;
+                    }
+                    break;
+                }
+            }
+            if (0 == iconUrl.Length) {
+                iconUrl = "http://" + e.Url.Host + "/favicon.ico";
+            }
+            SetFavicon(iconUrl);
+        }
         #endregion
 
         #region Private Method
+        private void SetFavicon(string url) {
+            try {
+                using (var stream = new MemoryStream()) {
+                    var resStream = WebRequest.Create(url).GetResponse().GetResponseStream();
+                    resStream.CopyTo(stream);
+                    this.cIcon.Source = AppCommon.GetBitmapImage(stream);
+                }
+            } catch(Exception ex) {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            this._loadingIcon = false;
+        }
+
         #endregion
     }
 }
