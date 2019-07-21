@@ -35,14 +35,14 @@ namespace MySimpleLauncher.UI {
         // https://qiita.com/katabamisan/items/081547f42512e93a31ab
         // http://d.hatena.ne.jp/maeyan/20091227/1261848549
         // https://ja.stackoverflow.com/questions/29568/c%E3%81%AB%E3%81%A6%E9%9D%9E%E3%82%A2%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%81%AE%E3%83%97%E3%83%AD%E3%82%BB%E3%82%B9%E3%81%B8%E3%82%AD%E3%83%BC%E5%85%A5%E5%8A%9B%E3%81%97%E3%81%9F%E3%81%84
-        private CustomContextMenu _categoryMenu = new CustomContextMenu();
-        private CustomContextMenu _itemMenu = new CustomContextMenu();
-        private AppSettings _settings;
+        private readonly CustomContextMenu _categoryMenu = new CustomContextMenu();
+        private readonly CustomContextMenu _itemMenu = new CustomContextMenu();
+        private readonly AppSettings _settings;
         private ProfileModel _currentProfile = null;
-        private System.Windows.Forms.NotifyIcon _notifyIcon = new System.Windows.Forms.NotifyIcon();
+        private readonly System.Windows.Forms.NotifyIcon _notifyIcon = new System.Windows.Forms.NotifyIcon();
 
-        private ObservableCollection<CategoryModel> _categoryList = new ObservableCollection<CategoryModel>();
-        private ObservableCollection<ItemModel> _itemList = new ObservableCollection<ItemModel>();
+        private readonly ObservableCollection<CategoryModel> _categoryList = new ObservableCollection<CategoryModel>();
+        private readonly ObservableCollection<ItemModel> _itemList = new ObservableCollection<ItemModel>();
 
         private Database _profileDatabase;
         private static MySimpleLauncherMain _self;
@@ -51,7 +51,6 @@ namespace MySimpleLauncher.UI {
 
         public delegate bool EnumWindowsDelegate(IntPtr hWnd, IntPtr lparam);
         private delegate bool SendVKeyNativeDelegate(uint keyStroke, KeySet keyset);
-        const uint WM_KEYDOWN = 0x100;
 
         private static class NativeMethods {
             [DllImport("user32.dll")]
@@ -187,8 +186,9 @@ namespace MySimpleLauncher.UI {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ProfileList_Click(object sender, RoutedEventArgs e) {
-            var profileList = new ProfileList(this._currentProfile);
-            profileList.Owner = this;
+            var profileList = new ProfileList(this._currentProfile) {
+                Owner = this
+            };
             if (true == profileList.ShowDialog()) {
                 this.ClearScreen();
                 if (!System.IO.File.Exists(profileList.SelectedModel.FilePath)) {
@@ -280,7 +280,10 @@ namespace MySimpleLauncher.UI {
                 return;
             }
             using (var table = new CategoriesTable(this._profileDatabase)) {
-                var model = new CategoryModel();
+                var model = new CategoryModel() {
+                    DisplayName = dialog.DisplayName,
+                    RowOrder = this._categoryList.Count,
+                };
                 model.DisplayName = dialog.DisplayName;
                 model.RowOrder = this._categoryList.Count;
                 model.Id = table.Insert(model);
@@ -298,8 +301,7 @@ namespace MySimpleLauncher.UI {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CategoryContextMenuEdit_Click(object sender, RoutedEventArgs e) {
-            var model = (this._categoryMenu.Tag as ListViewItem)?.DataContext as CategoryModel;
-            if (null == model) {
+            if (!((this._categoryMenu.Tag as ListViewItem)?.DataContext is CategoryModel model)) {
                 return;
             }
             var dialog = new EditCategoryName(this, model);
@@ -321,8 +323,7 @@ namespace MySimpleLauncher.UI {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CategoryContextMenuDelete_Click(object sender, RoutedEventArgs e) {
-            var model = (this._categoryMenu.Tag as ListViewItem)?.DataContext as CategoryModel;
-            if (null == model) {
+            if (!((this._categoryMenu.Tag as ListViewItem)?.DataContext is CategoryModel model)) {
                 return;
             }
             var dialog = new CategoryDeleteConfirm(this, model, this._categoryList);
@@ -488,11 +489,10 @@ namespace MySimpleLauncher.UI {
         }
 
         private void ItemList_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            var model = this.cItemList.GetItemAt(Mouse.GetPosition(this.cItemList))?.DataContext as ItemModel;
-            if (null == model) {
+            if (!(cItemList.GetItemAt(Mouse.GetPosition(this.cItemList))?.DataContext is ItemModel model)) {
                 return;
             }
-            MyLib.Util.MyLibUtil.RunApplication(model.FilePath, false);
+            MyLibUtil.RunApplication(model.FilePath, false);
         }
 
         private void ItemList_KeyDown(object sender, KeyEventArgs e) {
@@ -549,9 +549,10 @@ namespace MySimpleLauncher.UI {
         /// </summary>
         private void CreateContextMenu() {
             CustomContextMenu.MenuItemData CreateItem(int id, string text, RoutedEventHandler handler, bool isDelete = false) {
-                var item = new CustomContextMenu.MenuItemData();
-                item.Id = id;
-                item.Text = text;
+                var item = new CustomContextMenu.MenuItemData {
+                    Id = id,
+                    Text = text
+                };
                 item.Click += handler;
                 if (isDelete) {
                     item.ForeGround = "#FF0000";
@@ -578,13 +579,15 @@ namespace MySimpleLauncher.UI {
             this._notifyIcon.Text = "My Simple Launcher";
             this._notifyIcon.Icon = new System.Drawing.Icon("app_icon.ico");
             var menu = new System.Windows.Forms.ContextMenuStrip();
-            var menuItemShow = new System.Windows.Forms.ToolStripMenuItem();
-            menuItemShow.Text = "show";
+            var menuItemShow = new System.Windows.Forms.ToolStripMenuItem {
+                Text = "show"
+            };
             menuItemShow.Click += this.NotifyMenuShow_Click;
             menu.Items.Add(menuItemShow);
 
-            var menuItemExit = new System.Windows.Forms.ToolStripMenuItem();
-            menuItemExit.Text = "exit";
+            var menuItemExit = new System.Windows.Forms.ToolStripMenuItem {
+                Text = "exit"
+            };
             menuItemExit.Click += this.NotifyMenuExit_Click;
             menu.Items.Add(menuItemExit);
 
@@ -662,8 +665,7 @@ namespace MySimpleLauncher.UI {
 
             int length = NativeMethods.GetWindowTextLength(hWnd);
             if (0 < length) {
-                uint processId;
-                NativeMethods.GetWindowThreadProcessId(hWnd, out processId);
+                NativeMethods.GetWindowThreadProcessId(hWnd, out uint processId);
                 var proccess = Process.GetProcessById((int)processId);
 
                 if (_findSelf) {

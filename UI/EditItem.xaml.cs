@@ -17,11 +17,11 @@ namespace MySimpleLauncher.UI {
     public partial class EditItem : Window {
 
         #region Declaration
-        private ItemModel _model = null;
+        private readonly ItemModel _model = null;
 
         internal ItemModel Model { get { return this._model; } }
 
-        System.Windows.Forms.WebBrowser _browser = new System.Windows.Forms.WebBrowser();
+        private readonly System.Windows.Forms.WebBrowser _browser = new System.Windows.Forms.WebBrowser();
         private bool _loadingIcon = false;
         #endregion
 
@@ -44,7 +44,6 @@ namespace MySimpleLauncher.UI {
             this.cOK.Visibility = isReadOnly ? Visibility.Hidden : Visibility.Visible;
             this.cOK.IsEnabled = (0 < this._model.DisplayName?.Length);
             this.DataContext = this._model;
-            
         }
         #endregion
 
@@ -79,26 +78,32 @@ namespace MySimpleLauncher.UI {
                     this._browser.Navigate(this.cFilePath.Text);
                 }
             } else if (0 < this.cFilePath.Text.Length && System.IO.File.Exists(this.cFilePath.Text)) {
-                using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(this.cFilePath.Text)) {
-                    this.cIcon.Source = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(this.cFilePath.Text))
+                using (var stream = new MemoryStream()) {
+                    var encoder = new BmpBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions())));
+                    encoder.Save(stream);
+                    this.cIcon.Source = AppCommon.GetBitmapImage(stream);
+
+                    //this.cIcon.Source = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 }
             }
         }
 
         private void Icon_MouseDown(object sender, MouseButtonEventArgs e) {
-            var dialog = new OpenFileDialog();
-            //dialog.Filter = "jpg|*.jpg|png|*.png";
-            dialog.Filter = "jpg, png|*.jpg;*.png";
-            dialog.FilterIndex = 0;
-            dialog.Title = "アイコン画像を選択";
+            var dialog = new OpenFileDialog() {
+                Filter = "jpg, png|*.jpg;*.png",
+                FilterIndex = 0,
+                Title = "アイコン画像を選択"
+            };
             if (true != dialog.ShowDialog()) {
                 return;
             }
             this.cIcon.Source = AppCommon.GetBitmapImage(dialog.FileName);
         }
 
-        private  void Browser_DocumentCompleted(object sender, System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e) {
-            if (e.Url.AbsolutePath != (sender as System.Windows.Forms.WebBrowser).Url.AbsolutePath) { 
+        private void Browser_DocumentCompleted(object sender, System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e) {
+            if (e.Url.AbsolutePath != (sender as System.Windows.Forms.WebBrowser).Url.AbsolutePath) {
                 return;
             }
             string iconUrl = "";
@@ -119,7 +124,8 @@ namespace MySimpleLauncher.UI {
                 }
             }
             if (0 == iconUrl.Length) {
-                iconUrl = "http://" + e.Url.Host + "/favicon.ico";
+                // iconUrl = "http://" + e.Url.Host + "/favicon.ico";
+                iconUrl = e.Url.Scheme + "://" + e.Url.Host + "/favicon.ico";
             }
             SetFavicon(iconUrl);
         }
@@ -133,7 +139,7 @@ namespace MySimpleLauncher.UI {
                     resStream.CopyTo(stream);
                     this.cIcon.Source = AppCommon.GetBitmapImage(stream);
                 }
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
             this._loadingIcon = false;

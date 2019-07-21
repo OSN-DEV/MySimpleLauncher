@@ -57,7 +57,6 @@ namespace MySimpleLauncher.Util {
             var bitmapImage = new BitmapImage();
             try {
                 using (var stream = new MemoryStream(data)) {
-                    stream.Seek(0, SeekOrigin.Begin);
                     bitmapImage = GetBitmapImage(stream);
                 }
             } catch {
@@ -73,6 +72,7 @@ namespace MySimpleLauncher.Util {
         /// <returns>BitmapImage</returns>
         public static BitmapImage GetBitmapImage(Stream stream) {
             var bitmapImage = new BitmapImage();
+            stream.Seek(0, SeekOrigin.Begin);
             bitmapImage.BeginInit();
             bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
             bitmapImage.CreateOptions = BitmapCreateOptions.None;
