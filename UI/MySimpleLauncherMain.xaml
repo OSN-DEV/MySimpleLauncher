@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="MySimpleLauncher" Height="450" Width="800" WindowStartupLocation="CenterScreen" 
-        Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" KeyDown="MySimpleLauncherMain_KeyDown">
+        Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" KeyDown="MySimpleLauncherMain_KeyDown" Closed="MySimpleLauncherMain_Closed">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

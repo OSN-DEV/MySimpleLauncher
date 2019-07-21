@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,7 +52,7 @@ namespace MySimpleLauncher.UI {
 
         public delegate bool EnumWindowsDelegate(IntPtr hWnd, IntPtr lparam);
         private delegate bool SendVKeyNativeDelegate(uint keyStroke, KeySet keyset);
-
+        private HotKeyHelper _hotkey;
         private static class NativeMethods {
             [DllImport("user32.dll")]
             [return: MarshalAs(UnmanagedType.Bool)]
@@ -113,6 +114,16 @@ namespace MySimpleLauncher.UI {
             this._settings.Load();
             _self = this;
             _assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+
+            this._hotkey = new HotKeyHelper(this);
+            this._hotkey.Register(ModifierKeys.Control | ModifierKeys.Shift | ModifierKeys.Alt,
+                                  Key.A,
+                                  (_, __) => {
+                                      if (!this.ShowInTaskbar) {
+                                          NotifyMenuShow_Click(null, null);
+                                      }
+                                  }
+                                  );
         }
         #endregion
 
@@ -164,6 +175,15 @@ namespace MySimpleLauncher.UI {
             this.WindowState = WindowState.Minimized;
             this.ShowInTaskbar = false;
             this._notifyIcon.Visible = true;
+        }
+
+        /// <summary>
+        /// window closed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MySimpleLauncherMain_Closed(object sender, EventArgs e) {
+            this._hotkey.Dispose();
         }
 
         /// <summary>
