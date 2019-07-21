@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MySimpleLauncher" Height="450" Width="800" WindowStartupLocation="CenterScreen" Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" >
+        Title="MySimpleLauncher" Height="450" Width="800" WindowStartupLocation="CenterScreen" 
+        Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" KeyDown="MySimpleLauncherMain_KeyDown">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,8 +26,8 @@
         <StackPanel Grid.Column="0" Background="#DEE7FF" >
             <Button Content="No Profilexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaaaaaaaaaaax" Style="{StaticResource LabelButton}" Height="50" Click="ProfileList_Click" Name="cProfileList" />
         </StackPanel>
-        <ListView Name="cCategoryList" Grid.Column="0" Grid.Row="1" Height="Auto" 
-                ItemsSource="{Binding}" ContextMenuOpening="CategoryList_ContextMenuOpening" SelectionChanged="CategoryList_SelectionChanged">
+        <ListView Name="cCategoryList" Grid.Column="0" Grid.Row="1" Height="Auto" ItemsSource="{Binding}" 
+                  ContextMenuOpening="CategoryList_ContextMenuOpening" SelectionChanged="CategoryList_SelectionChanged" KeyDown="CategoryList_KeyDown" SelectionMode="Single"> 
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>

@@ -68,17 +68,8 @@ namespace MySimpleLauncher.UI {
             internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, [Out] out uint lpdwProcessId);
 
             [DllImport("user32.dll")]
-            public static extern IntPtr GetMessageExtraInfo();
-
-            [DllImport("user32.dll")]
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-            [DllImport("User32.dll", EntryPoint = "SendInput", SetLastError = true)]
-            internal static extern uint SendInput32(uint nInputs, INPUT32[] pInputs, int cbSize);
-
-            [DllImport("User32.dll", EntryPoint = "SendInput", SetLastError = true)]
-            internal static extern uint SendInput64(uint nInputs, INPUT64[] pInputs, int cbSize);
         }
 
         /// <summary>
@@ -100,13 +91,6 @@ namespace MySimpleLauncher.UI {
             public const int ScanCode = 0x08;
         }
 
-        private static class KeyStroke {
-            public const int KeyDown = 0x100;
-            public const int KeyUp = 0x101;
-            public const int SysKeyDown = 0x104;
-            public const int SysKeyup = 0x105;
-        }
-
         private class KeySet {
             public ushort VirtualKey;
             public ushort ScanCode;
@@ -118,62 +102,6 @@ namespace MySimpleLauncher.UI {
                 this.ScanCode = KeySetPair.ScanCode(pair);
                 this.Flag = flag;
             }
-        }
-
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        internal struct MOUSEINPUT32 {
-            public uint __Unused0; // See INPUT32 structure
-
-            public int X;
-            public int Y;
-            public uint MouseData;
-            public uint Flags;
-            public uint Time;
-            public IntPtr ExtraInfo;
-        }
-
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        internal struct KEYBDINPUT32 {
-            public uint __Unused0; // See INPUT32 structure
-
-            public ushort VirtualKey;
-            public ushort ScanCode;
-            public uint Flags;
-            public uint Time;
-            public IntPtr ExtraInfo;
-        }
-
-        [StructLayout(LayoutKind.Explicit)]
-        internal struct INPUT32 {
-            [FieldOffset(0)]
-            public uint Type;
-            [FieldOffset(0)]
-            public MOUSEINPUT32 Mouse;
-            [FieldOffset(0)]
-            public KEYBDINPUT32 Keyboard;
-        }
-
-        // INPUT.KI (40). vk: 8, sc: 10, fl: 12, t: 16, ex: 24
-        [StructLayout(LayoutKind.Explicit, Size = 40)]
-        internal struct INPUT64 {
-            [FieldOffset(0)]
-            public uint Type;
-            [FieldOffset(8)]
-            public ushort VirtualKey;
-            [FieldOffset(10)]
-            public ushort ScanCode;
-            [FieldOffset(12)]
-            public uint Flags;
-            [FieldOffset(16)]
-            public uint Time;
-            [FieldOffset(24)]
-            public IntPtr ExtraInfo;
-        }
-
-        private static class InputType {
-            public const uint Mouse = 0;
-            public const uint Keyboard = 1;
-            public const uint Hardware = 2;
         }
         #endregion
 
@@ -240,6 +168,20 @@ namespace MySimpleLauncher.UI {
         }
 
         /// <summary>
+        /// key down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MySimpleLauncherMain_KeyDown(object sender, KeyEventArgs e) {
+              if (e.Key == Key.A && IsModifierPressed(ModifierKeys.Control) && IsModifierPressed(ModifierKeys.Shift)) {
+                e.Handled = true;
+                if (null != this.cCategoryList.SelectedItem) {
+                    this.ItemContextMenuAdd_Click(null, null);
+                }
+            }
+        }
+
+        /// <summary>
         /// profile list click
         /// </summary>
         /// <param name="sender"></param>
@@ -276,6 +218,46 @@ namespace MySimpleLauncher.UI {
         }
 
         /// <summary>
+        /// category list key down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CategoryList_KeyDown(object sender, KeyEventArgs e) {
+            var selectedIndex = this.cCategoryList.SelectedIndex;
+            bool updateOrder = false;
+            if (Key.U == e.Key && this.IsModifierPressed(ModifierKeys.Shift) && this.IsModifierPressed(ModifierKeys.Control)) {
+                if (selectedIndex <= 0) {
+                    return;
+                }
+                var model = this._categoryList[selectedIndex];
+                this._categoryList.Remove(model);
+                selectedIndex--;
+                this._categoryList.Insert(selectedIndex, model);
+                updateOrder = true;
+                e.Handled = true;
+            } else if (Key.D == e.Key && this.IsModifierPressed(ModifierKeys.Shift) && this.IsModifierPressed(ModifierKeys.Control)) {
+                if (-1 == selectedIndex || this._categoryList.Count - 1 <= selectedIndex) {
+                    return;
+                }
+                var model = this._categoryList[selectedIndex];
+                this._categoryList.Remove(model);
+                selectedIndex++;
+                this._categoryList.Insert(selectedIndex, model);
+                updateOrder = true;
+                e.Handled = true;
+            }
+            if (updateOrder) {
+                using (var table = new CategoriesTable(this._profileDatabase)) {
+                    if (table.UpdateRowOrdersByIds(this._categoryList) == 0) {
+                        AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToUpdate, "category"));
+                    } else {
+                        this.cCategoryList.SelectedIndex = selectedIndex;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// category list selection changed
         /// </summary>
         /// <param name="sender"></param>
@@ -300,6 +282,7 @@ namespace MySimpleLauncher.UI {
             using (var table = new CategoriesTable(this._profileDatabase)) {
                 var model = new CategoryModel();
                 model.DisplayName = dialog.DisplayName;
+                model.RowOrder = this._categoryList.Count;
                 model.Id = table.Insert(model);
                 if (model.Id < 0) {
                     AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToInsert, "category"));
@@ -324,7 +307,6 @@ namespace MySimpleLauncher.UI {
                 return;
             }
             using (var table = new CategoriesTable(this._profileDatabase)) {
-
                 model.DisplayName = dialog.DisplayName;
                 if (0 == table.UpdateById(model)) {
                     AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToUpdate, "category"));
@@ -339,10 +321,6 @@ namespace MySimpleLauncher.UI {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CategoryContextMenuDelete_Click(object sender, RoutedEventArgs e) {
-            // todo : show delete confirm dialog
-            // todo : move items if need
-            // todo : delete items if need
-            // todo : delete category
             var model = (this._categoryMenu.Tag as ListViewItem)?.DataContext as CategoryModel;
             if (null == model) {
                 return;
@@ -372,9 +350,6 @@ namespace MySimpleLauncher.UI {
                 this._profileDatabase.RollbackTrans();
                 this._profileDatabase.Close();
             }
-
-
-
         }
 
         /// <summary>
@@ -521,11 +496,11 @@ namespace MySimpleLauncher.UI {
         }
 
         private void ItemList_KeyDown(object sender, KeyEventArgs e) {
-            if (e.Key == Key.U && ((Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.None)) {
+            if (e.Key == Key.U && IsModifierPressed(ModifierKeys.Control)) {
                 e.Handled = true;
                 var itemsModel = this.cItemList.SelectedItem as ItemModel;
                 MyLibUtil.RunApplication(itemsModel.FilePath, false);
-            } else if (e.Key == Key.V && ((Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.None)) {
+            } else if (e.Key == Key.V && IsModifierPressed(ModifierKeys.Control)) {
                 e.Handled = true;
                 Task.Run(() => {
                     System.Threading.Thread.Sleep(200);
@@ -675,15 +650,6 @@ namespace MySimpleLauncher.UI {
         }
 
         /// <summary>
-        /// get next windows handle
-        /// </summary>
-        /// <returns></returns>
-        private void GetNextWindowsHandle() {
-            NativeMethods.EnumWindows(new EnumWindowsDelegate(EnumWindowCallBack), IntPtr.Zero);
-        }
-
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="hWnd"></param>
@@ -715,62 +681,6 @@ namespace MySimpleLauncher.UI {
         }
 
         /// <summary>
-        /// send key for 32bit
-        /// </summary>
-        /// <param name="keyStroke"></param>
-        /// <param name="keyset"></param>
-        /// <returns></returns>
-        private bool SendVKeyNative32(INPUT32[] inputs) {
-            var count = (uint)inputs.Length;
-            if (NativeMethods.SendInput32(count, inputs, Marshal.SizeOf(typeof(INPUT32))) != count) {
-                return false;
-            }
-            DoEvents();
-            return true;
-        }
-
-        /// <summary>
-        /// Create INPUT32 Instance
-        /// </summary>
-        /// <param name="keyStroke"></param>
-        /// <param name="keyset"></param>
-        /// <returns></returns>
-        private INPUT32 CreateInput32(uint keyStroke, KeySet keyset) {
-            var input = new INPUT32();
-            input.Type = InputType.Keyboard;
-            input.Keyboard.Flags = keyStroke | keyset.Flag;
-            input.Keyboard.VirtualKey = keyset.VirtualKey;
-            // input.Keyboard.ScanCode =(ushort)(NativeMethods.MapVirtualKey3((uint)keyset.VirtualKey, NativeMethods.MAPVK_VK_TO_VSC, _keyboardLayout) & 0xFFU); ;
-            input.Keyboard.ScanCode = 0;
-            input.Keyboard.Time = 0;
-            input.Keyboard.ExtraInfo = NativeMethods.GetMessageExtraInfo();
-            return input;
-        }
-
-        /// <summary>
-        /// send key for 64bit
-        /// </summary>
-        /// <param name="keyStroke"></param>
-        /// <param name="keyset"></param>
-        /// <returns></returns>
-        private bool SendVKeyNative64(uint keyStroke, KeySet keyset) {
-            var input = new INPUT64();
-            input.Type = InputType.Keyboard;
-            input.Flags = keyStroke | keyset.Flag;
-            input.VirtualKey = keyset.VirtualKey;
-            // input.ScanCode = (ushort)(NativeMethods.MapVirtualKey3((uint)keyset.VirtualKey, NativeMethods.MAPVK_VK_TO_VSC, _keyboardLayout) & 0xFFU);
-            input.ScanCode = 0;
-            input.Time = 0;
-            input.ExtraInfo = NativeMethods.GetMessageExtraInfo();
-            INPUT64[] inputs = { input };
-            if (NativeMethods.SendInput64(1, inputs, Marshal.SizeOf(typeof(INPUT64))) != 1) {
-                return false;
-            }
-            DoEvents();
-            return true;
-        }
-
-        /// <summary>
         /// same as visual basic doevent
         /// </summary>
         private static void DoEvents() {
@@ -782,6 +692,15 @@ namespace MySimpleLauncher.UI {
         private static object ExitFrames(object obj) {
             ((DispatcherFrame)obj).Continue = false;
             return null;
+        }
+
+        /// <summary>
+        /// check if modifiered key is pressed
+        /// </summary>
+        /// <param name="key">modifier key</param>
+        /// <returns>true:modifiered key is pressed, false:otherwise</returns>
+        private bool IsModifierPressed(ModifierKeys key) {
+            return (Keyboard.Modifiers & key) != ModifierKeys.None;
         }
         #endregion
 

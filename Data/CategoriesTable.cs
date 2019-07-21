@@ -1,5 +1,7 @@
 ﻿using MyLib.Data.Sqlite;
 using MySimpleLauncher.Model;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace MySimpleLauncher.Data {
     /// <summary>
@@ -86,6 +88,39 @@ namespace MySimpleLauncher.Data {
 
             this.OpenDatabase();
             return base.Database.ExecuteNonQuery(sql, paramList);
+        }
+
+        /// <summary>
+        /// update orders
+        /// </summary>
+        /// <param name="categories"></param>
+        internal int UpdateRowOrdersByIds(ObservableCollection<CategoryModel>models) {
+            int count = 0;
+            foreach (var (model, index) in models.Select((model, index) => (model, index))) {
+                model.RowOrder = index;                
+            }
+
+            var sql = new SqlBuilder();
+            sql.AppendSql("UPDATE categories SET")
+                .AppendSql(" row_order =@row_order")
+                .AppendSql("WHERE id = @id");
+            var paramList = new ParameterList();
+            paramList.Add("@row_order", 0);
+            paramList.Add("@id", 0);
+
+            this.OpenDatabase();
+            base.Database.BeginTrans();
+            try {
+                foreach (var model in models) {
+                    paramList.GetParam("@row_order").Value = model.RowOrder;
+                    paramList.GetParam("@id").Value = model.Id;
+                    count += base.Database.ExecuteNonQuery(sql, paramList);
+                }
+            }catch {
+                base.Database.RollbackTrans();
+            }
+            base.Database.CommitTrans();
+            return count;
         }
 
         /// <summary>
