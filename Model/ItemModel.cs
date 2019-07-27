@@ -50,6 +50,7 @@ namespace MySimpleLauncher.Model {
         public string UserId { set; get; }
         public string FirstName { set; get; }
         public string LastName { set; get; }
+        public string NickName { set; get; }
         public string Sex { set; get; }
         public string Mail { set; get; }
         public string Birthday { set; get; }
@@ -109,6 +110,7 @@ namespace MySimpleLauncher.Model {
             this.UserId = table.UserId;
             this.FirstName = table.FirstName;
             this.LastName = table.LastName;
+            this.NickName = table.NickName;
             this.Sex = table.Sex;
             this.Mail = table.Mail;
             this.Birthday = table.Birthday;
@@ -116,6 +118,7 @@ namespace MySimpleLauncher.Model {
             this.Prefecture = table.Prefecture;
             this.Address1 = table.Address1;
             this.Address2 = table.Address2;
+            this.Tel = table.Tel;
             this.SecretQuestion1 = table.SecretQuestion1;
             this.SecretAnswer1 = table.SecretAnswer1;
             this.SecretQuestion2 = table.SecretQuestion2;

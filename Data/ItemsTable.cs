@@ -18,6 +18,7 @@ namespace MySimpleLauncher.Data {
         internal string UserId { set; get; }
         internal string FirstName { set; get; }
         internal string LastName { set; get; }
+        internal string NickName { set; get; }
         internal string Sex { set; get; }
         internal string Mail { set; get; }
         internal string Birthday { set; get; }
@@ -25,6 +26,7 @@ namespace MySimpleLauncher.Data {
         internal string Prefecture { set; get; }
         internal string Address1 { set; get; }
         internal string Address2 { set; get; }
+        internal string Tel { set; get; }
         internal string SecretQuestion1 { set; get; }
         internal string SecretAnswer1 { set; get; }
         internal string SecretQuestion2 { set; get; }
@@ -97,6 +99,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",prefecture       TEXT")
                 .AppendSql(",address1         TEXT")
                 .AppendSql(",address2         TEXT")
+                .AppendSql(",tel              TEXT")
                 .AppendSql(",secret_question1 TEXT")
                 .AppendSql(",secret_answer1   TEXT")
                 .AppendSql(",secret_question2 TEXT")
@@ -154,6 +157,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",prefecture")
                 .AppendSql(",address1")
                 .AppendSql(",address2")
+                .AppendSql(",tel")
                 .AppendSql(",secret_question1")
                 .AppendSql(",secret_answer1")
                 .AppendSql(",secret_question2")
@@ -195,6 +199,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",@user_id")
                 .AppendSql(",@first_name")
                 .AppendSql(",@last_name")
+                .AppendSql(",@nick_name")
                 .AppendSql(",@sex")
                 .AppendSql(",@mail")
                 .AppendSql(",@birthday")
@@ -202,6 +207,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",@prefecture")
                 .AppendSql(",@address1")
                 .AppendSql(",@address2")
+                .AppendSql(",@tel")
                 .AppendSql(",@secret_question1")
                 .AppendSql(",@secret_answer1")
                 .AppendSql(",@secret_question2")
@@ -242,6 +248,7 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@user_id", model.UserId);
             paramList.Add("@first_name", model.FirstName);
             paramList.Add("@last_name", model.LastName);
+            paramList.Add("@nick_name", model.NickName);
             paramList.Add("@sex", model.Sex);
             paramList.Add("@mail", model.Mail);
             paramList.Add("@birthday", model.Birthday);
@@ -249,6 +256,7 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@prefecture", model.Prefecture);
             paramList.Add("@address1", model.Address1);
             paramList.Add("@address2", model.Address2);
+            paramList.Add("@tel", model.Tel);
             paramList.Add("@secret_question1", model.SecretQuestion1);
             paramList.Add("@secret_answer1", model.SecretAnswer1);
             paramList.Add("@secret_question2", model.SecretQuestion2);
@@ -300,6 +308,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",user_id = @user_id")
                 .AppendSql(",first_name = @first_name")
                 .AppendSql(",last_name = @last_name")
+                .AppendSql(",nick_name = @nick_name")
                 .AppendSql(",sex = @sex")
                 .AppendSql(",mail = @mail")
                 .AppendSql(",birthday = @birthday")
@@ -307,6 +316,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",prefecture = @prefecture")
                 .AppendSql(",address1 = @address1")
                 .AppendSql(",address2 = @address2")
+                .AppendSql(",tel = @tel")
                 .AppendSql(",secret_question1 = @secret_question1")
                 .AppendSql(",secret_answer1 = @secret_answer1")
                 .AppendSql(",secret_question2 = @secret_question2")
@@ -349,6 +359,7 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@user_id", model.UserId);
             paramList.Add("@first_name", model.FirstName);
             paramList.Add("@last_name", model.LastName);
+            paramList.Add("@nick_name", model.NickName);
             paramList.Add("@sex", model.Sex);
             paramList.Add("@mail", model.Mail);
             paramList.Add("@birthday", model.Birthday);
@@ -356,6 +367,7 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@prefecture", model.Prefecture);
             paramList.Add("@address1", model.Address1);
             paramList.Add("@address2", model.Address2);
+            paramList.Add("@tel", model.Tel);
             paramList.Add("@secret_question1", model.SecretQuestion1);
             paramList.Add("@secret_answer1", model.SecretAnswer1);
             paramList.Add("@secret_question2", model.SecretQuestion2);
@@ -469,6 +481,7 @@ namespace MySimpleLauncher.Data {
             this.UserId = base.GetString("user_id");
             this.FirstName = base.GetString("first_name");
             this.LastName = base.GetString("last_name");
+            this.NickName = base.GetString("nick_name");
             this.Sex = base.GetString("sex");
             this.Mail = base.GetString("mail");
             this.Birthday = base.GetString("birthday");
@@ -476,6 +489,7 @@ namespace MySimpleLauncher.Data {
             this.Prefecture = base.GetString("prefecture");
             this.Address1 = base.GetString("address1");
             this.Address2 = base.GetString("address2");
+            this.Tel = base.GetString("tel");
             this.SecretQuestion1 = base.GetString("secret_question1");
             this.SecretAnswer1 = base.GetString("secret_answer1");
             this.SecretQuestion2 = base.GetString("secret_question2");

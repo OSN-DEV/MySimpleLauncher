@@ -93,6 +93,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
 
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -110,47 +111,46 @@
                             </Grid.ColumnDefinitions>
                             <u:CustomTextBox Grid.Column="0" Text="{Binding LastName,UpdateSourceTrigger=PropertyChanged}" MaxLength="10" Width="90" ImeMode="Hiragana" />
                             <u:CustomTextBox Grid.Column="2" Text="{Binding FirstName,UpdateSourceTrigger=PropertyChanged}" MaxLength="10" Width="90" />
-                            <!--<u:CustomTextBox Grid.Column="2" Text="AAAAABBBBB" MaxLength="10" Width="90"/>-->
                         </Grid>
 
-                        <TextBlock       Grid.Column="0" Grid.Row="3" Text="Sex"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="3" Text="{Binding Sex,UpdateSourceTrigger=PropertyChanged}" MaxLength="1" HorizontalAlignment="Stretch" ImeMode="Hiragana" />
+                        <TextBlock       Grid.Column="0" Grid.Row="3" Text="NickName"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="3" Text="{Binding NickName,UpdateSourceTrigger=PropertyChanged}" MaxLength="128" HorizontalAlignment="Stretch" ImeMode="Disabled" />
 
-                        <TextBlock       Grid.Column="0" Grid.Row="4" Text="Mail"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="4" Text="{Binding Mail,UpdateSourceTrigger=PropertyChanged}" MaxLength="128" HorizontalAlignment="Stretch" ImeMode="Disabled" />
+                        <TextBlock       Grid.Column="0" Grid.Row="4" Text="Sex"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="4" Text="{Binding Sex,UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="40" ImeMode="Hiragana" />
 
-                        <TextBlock       Grid.Column="0" Grid.Row="5" Text="Birthday"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="5" Text="{Binding Birthday,UpdateSourceTrigger=PropertyChanged}" MaxLength="10" Width="80" ImeMode="Disabled"  />
-                        <!--<TextBox   Grid.Column="2" Grid.Row="4" Text="9999/99/99" MaxLength="10" Width="80"/>-->
+                        <TextBlock       Grid.Column="0" Grid.Row="5" Text="Mail"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="5" Text="{Binding Mail,UpdateSourceTrigger=PropertyChanged}" MaxLength="128" HorizontalAlignment="Stretch" ImeMode="Disabled" />
 
-                        <TextBlock Grid.Column="0" Grid.Row="6" Text="Zip Code"  />
-                        <u:CustomTextBox   Grid.Column="2" Grid.Row="6" Text="{Binding ZipCode,UpdateSourceTrigger=PropertyChanged}" MaxLength="8" Width="70" ImeMode="Disabled"  />
+                        <TextBlock       Grid.Column="0" Grid.Row="6" Text="Birthday"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="6" Text="{Binding Birthday,UpdateSourceTrigger=PropertyChanged}" MaxLength="10" Width="80" ImeMode="Disabled"  />
 
-                        <TextBlock Grid.Column="0" Grid.Row="7" Text="Prefecture"  />
-                        <u:CustomTextBox   Grid.Column="2" Grid.Row="7" Text="{Binding Prefecture,UpdateSourceTrigger=PropertyChanged}" MaxLength="4" Width="55" ImeMode="Hiragana" />
-                        <!--<u:CustomTextBox   Grid.Column="2" Grid.Row="5" Text="神奈川県" MaxLength="4" Width="55" ImeMode="Hiragana" />-->
+                        <TextBlock         Grid.Column="0" Grid.Row="7" Text="Zip Code"  />
+                        <u:CustomTextBox   Grid.Column="2" Grid.Row="7" Text="{Binding ZipCode,UpdateSourceTrigger=PropertyChanged}" MaxLength="8" Width="70" ImeMode="Disabled"  />
 
-                        <TextBlock       Grid.Column="0" Grid.Row="8" Text="Address1"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="8" Text="{Binding Address1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch"  />
+                        <TextBlock         Grid.Column="0" Grid.Row="8" Text="Prefecture"  />
+                        <u:CustomTextBox   Grid.Column="2" Grid.Row="8" Text="{Binding Prefecture,UpdateSourceTrigger=PropertyChanged}" MaxLength="4" Width="55" ImeMode="Hiragana" />
 
-                        <TextBlock       Grid.Column="0" Grid.Row="9" Text="Address2"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="9" Text="{Binding Address2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                        <TextBlock       Grid.Column="0" Grid.Row="9" Text="Address1"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="9" Text="{Binding Address1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch"  />
 
-                        <TextBlock       Grid.Column="0" Grid.Row="10" Text="Tel"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="10" Text="{Binding Tel,UpdateSourceTrigger=PropertyChanged}" ImeMode="Disabled" MaxLength="15" Width="100" />
-                        <!--<u:CustomTextBox Grid.Column="2" Grid.Row="9" Text="090-3391-6248" ImeMode="Disabled" MaxLength="15" Width="100" />-->
+                        <TextBlock       Grid.Column="0" Grid.Row="10" Text="Address2"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="10" Text="{Binding Address2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
 
-                        <TextBlock       Grid.Column="0" Grid.Row="11" Text="Secret QA1"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="11" Text="{Binding SecretQuestion1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="12" Text="{Binding SecretAnswer1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                        <TextBlock       Grid.Column="0" Grid.Row="11" Text="Tel"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="11" Text="{Binding Tel,UpdateSourceTrigger=PropertyChanged}" ImeMode="Disabled" MaxLength="15" Width="120" />
 
-                        <TextBlock       Grid.Column="0" Grid.Row="13" Text="Secret QA2"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="13" Text="{Binding SecretQuestion2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="14" Text="{Binding SecretAnswer2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                        <TextBlock       Grid.Column="0" Grid.Row="12" Text="Secret QA1"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="12" Text="{Binding SecretQuestion1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="13" Text="{Binding SecretAnswer1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
 
-                        <TextBlock       Grid.Column="0" Grid.Row="15" Text="Secret QA3"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="15" Text="{Binding SecretQuestion3,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="16" Text="{Binding SecretAnswer3,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                        <TextBlock       Grid.Column="0" Grid.Row="14" Text="Secret QA2"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="14" Text="{Binding SecretQuestion2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="15" Text="{Binding SecretAnswer2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+
+                        <TextBlock       Grid.Column="0" Grid.Row="16" Text="Secret QA3"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="16" Text="{Binding SecretQuestion3,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="17" Text="{Binding SecretAnswer3,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
                     </Grid>
                 </ScrollViewer>
             </TabItem>

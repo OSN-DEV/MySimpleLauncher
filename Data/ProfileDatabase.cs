@@ -42,7 +42,9 @@ namespace MySimpleLauncher.Data {
         private List<SqlBuilder> CreateSqlsFrom1To2() {
             var sqls = new List<SqlBuilder>();
             var sql = new SqlBuilder();
-            sql.AppendSql("ALTER TABLE items ADD COLUMN sex TEXT");
+            //sql.AppendSql("ALTER TABLE items ADD COLUMN sex TEXT");
+            //sql.AppendSql("ALTER TABLE items ADD COLUMN nick_name TEXT");
+            sql.AppendSql("ALTER TABLE items ADD COLUMN tel TEXT");
             sqls.Add(sql);
             return sqls;
         }
