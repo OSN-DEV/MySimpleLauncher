@@ -2,13 +2,13 @@
 using MySimpleLauncher.Model;
 using MySimpleLauncher.Util;
 using System;
+using System.IO;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using System.IO;
-using System.Net;
 
 namespace MySimpleLauncher.UI {
     /// <summary>
@@ -77,16 +77,17 @@ namespace MySimpleLauncher.UI {
                     this._loadingIcon = true;
                     this._browser.Navigate(this.cFilePath.Text);
                 }
-            } else if (0 < this.cFilePath.Text.Length && System.IO.File.Exists(this.cFilePath.Text)) {
+            } else if (0 < this.cFilePath.Text.Length && File.Exists(this.cFilePath.Text)) {
                 using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(this.cFilePath.Text))
                 using (var stream = new MemoryStream()) {
                     var encoder = new BmpBitmapEncoder();
                     encoder.Frames.Add(BitmapFrame.Create(Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions())));
                     encoder.Save(stream);
                     this.cIcon.Source = AppCommon.GetBitmapImage(stream);
-
-                    //this.cIcon.Source = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 }
+            } else if (0 < this.cFilePath.Text.Length && Directory.Exists(this.cFilePath.Text)) {
+                // https://www.doraxdora.com/blog/2018/01/31/post-3807/
+                // win apiを使用する必要あり
             }
         }
 

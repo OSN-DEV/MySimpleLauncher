@@ -133,6 +133,7 @@
     <Compile Include="Util\AppCommon.cs" />
     <Compile Include="Util\HotKeyHelper.cs" />
     <Compile Include="Util\KeySetPair.cs" />
+    <Compile Include="Util\NativeMethods.cs" />
     <Compile Include="Util\Wording.cs" />
     <Page Include="BasicDesign.xaml">
       <SubType>Designer</SubType>

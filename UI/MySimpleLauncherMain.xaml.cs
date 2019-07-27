@@ -1,28 +1,20 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MyLib.File;
+using MyLib.Util;
 using MySimpleLauncher.Component;
 using MySimpleLauncher.Data;
 using MySimpleLauncher.Model;
 using MySimpleLauncher.Util;
+using System;
 using System.Collections.ObjectModel;
-using MyLib.Data.Sqlite;
-using MyLib.Util;
-using MyLib.File;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace MySimpleLauncher.UI {
@@ -50,27 +42,9 @@ namespace MySimpleLauncher.UI {
         private static string _assemblyName;
         private static bool _findSelf = false;
 
-        public delegate bool EnumWindowsDelegate(IntPtr hWnd, IntPtr lparam);
-        private delegate bool SendVKeyNativeDelegate(uint keyStroke, KeySet keyset);
+        private delegate bool SendVKeyNativeDelegate(uint keyStroke, NativeMethods.KeySet keyset);
         private readonly HotKeyHelper _hotkey;
-        private static class NativeMethods {
-            [DllImport("user32.dll")]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            public extern static bool EnumWindows(EnumWindowsDelegate lpEnumFunc, IntPtr lparam);
 
-            [DllImport("user32")]
-            public static extern bool IsWindowVisible(IntPtr hWnd);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-            public static extern int GetWindowTextLength(IntPtr hWnd);
-
-            [DllImport("User32.dll")]
-            internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, [Out] out uint lpdwProcessId);
-
-            [DllImport("user32.dll")]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool SetForegroundWindow(IntPtr hWnd);
-        }
 
         /// <summary>
         /// Id for context menu
@@ -80,28 +54,6 @@ namespace MySimpleLauncher.UI {
             Edit,
             Detail,
             Delete
-        }
-
-        private static class Flags {
-            public const int None = 0x00;
-            public const int KeyDown = 0x00;
-            public const int KeyUp = 0x02;
-            public const int ExtendeKey = 0x01;
-            public const int Unicode = 0x04;
-            public const int ScanCode = 0x08;
-        }
-
-        private class KeySet {
-            public ushort VirtualKey;
-            public ushort ScanCode;
-            public uint Flag;
-            public KeySet(byte[] pair) : this(pair, Flags.None) {
-            }
-            public KeySet(byte[] pair, uint flag) {
-                this.VirtualKey = KeySetPair.VirtualKey(pair);
-                this.ScanCode = KeySetPair.ScanCode(pair);
-                this.Flag = flag;
-            }
         }
         #endregion
 
@@ -484,7 +436,9 @@ namespace MySimpleLauncher.UI {
         }
 
         private void ItemList_Drop(object sender, DragEventArgs e) {
-            var files = e.Data.GetData(DataFormats.FileDrop) as string[];
+            if (!(e.Data.GetData(DataFormats.FileDrop) is string[] files)) {
+                return;
+            }
             using (var table = new ItemsTable(this._profileDatabase)) {
                 table.OpenDatabase();
                 table.BeginTrans();
@@ -526,7 +480,7 @@ namespace MySimpleLauncher.UI {
                 Task.Run(() => {
                     System.Threading.Thread.Sleep(200);
                     _findSelf = false;
-                    NativeMethods.EnumWindows(new EnumWindowsDelegate(EnumWindowCallBack), IntPtr.Zero);
+                    NativeMethods.EnumWindows(new NativeMethods.EnumWindowsDelegate(EnumWindowCallBack), IntPtr.Zero);
                 });
             }
         }

@@ -10,8 +10,9 @@ namespace MySimpleLauncher.Data {
     internal class ProfileDatabase : Database {
         #region Declaration
         private enum DbVersion {
+            Ver00 = 0,
             Ver01 = 1,
-            Current = Ver01
+            Current = Ver00
 
         };
         private delegate List<SqlBuilder> CreateSqls();
