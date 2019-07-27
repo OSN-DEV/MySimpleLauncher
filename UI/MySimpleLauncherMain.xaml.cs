@@ -45,14 +45,14 @@ namespace MySimpleLauncher.UI {
         private readonly ObservableCollection<CategoryModel> _categoryList = new ObservableCollection<CategoryModel>();
         private readonly ObservableCollection<ItemModel> _itemList = new ObservableCollection<ItemModel>();
 
-        private Database _profileDatabase;
+        private ProfileDatabase _profileDatabase;
         private static MySimpleLauncherMain _self;
         private static string _assemblyName;
         private static bool _findSelf = false;
 
         public delegate bool EnumWindowsDelegate(IntPtr hWnd, IntPtr lparam);
         private delegate bool SendVKeyNativeDelegate(uint keyStroke, KeySet keyset);
-        private HotKeyHelper _hotkey;
+        private readonly HotKeyHelper _hotkey;
         private static class NativeMethods {
             [DllImport("user32.dll")]
             [return: MarshalAs(UnmanagedType.Bool)]
@@ -150,7 +150,7 @@ namespace MySimpleLauncher.UI {
                         this._currentProfile = new ProfileModel(table);
                         if (System.IO.File.Exists(table.FilePath)) {
                             this.cProfileList.Content = this._currentProfile.DisplayName;
-                            this._profileDatabase = new Database(table.FilePath);
+                            this._profileDatabase = new ProfileDatabase(table.FilePath);
 
                             this.ShowCategoryList();
                             this.cCategoryList.SelectedIndex = this._settings.CategoryListSelectedIndex;
@@ -215,7 +215,7 @@ namespace MySimpleLauncher.UI {
                     AppCommon.ShowErrorMsg(string.Format(ErrorMsg.ProfileNotFound, profileList.SelectedModel.FilePath));
                     return;
                 }
-                this._profileDatabase = new Database(profileList.SelectedModel.FilePath);
+                this._profileDatabase = new ProfileDatabase(profileList.SelectedModel.FilePath);
                 this._currentProfile = profileList.SelectedModel;
                 this.cProfileList.Content = this._currentProfile.DisplayName;
                 this._settings.CurrentProfileId = this._currentProfile.Id;
@@ -287,6 +287,7 @@ namespace MySimpleLauncher.UI {
             this.ShowItemList(model);
             this._settings.CategoryListSelectedIndex = this.cCategoryList.SelectedIndex;
             this._settings.Save();
+            this._itemMenu.IsEnabled = true;
         }
 
         /// <summary>

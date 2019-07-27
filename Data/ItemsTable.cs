@@ -18,6 +18,7 @@ namespace MySimpleLauncher.Data {
         internal string UserId { set; get; }
         internal string FirstName { set; get; }
         internal string LastName { set; get; }
+        internal string Sex { set; get; }
         internal string Mail { set; get; }
         internal string Birthday { set; get; }
         internal string ZipCode { set; get; }
@@ -194,6 +195,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",@user_id")
                 .AppendSql(",@first_name")
                 .AppendSql(",@last_name")
+                .AppendSql(",@sex")
                 .AppendSql(",@mail")
                 .AppendSql(",@birthday")
                 .AppendSql(",@zip_code")
@@ -240,6 +242,7 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@user_id", model.UserId);
             paramList.Add("@first_name", model.FirstName);
             paramList.Add("@last_name", model.LastName);
+            paramList.Add("@sex", model.Sex);
             paramList.Add("@mail", model.Mail);
             paramList.Add("@birthday", model.Birthday);
             paramList.Add("@zip_code", model.ZipCode);
@@ -297,6 +300,7 @@ namespace MySimpleLauncher.Data {
                 .AppendSql(",user_id = @user_id")
                 .AppendSql(",first_name = @first_name")
                 .AppendSql(",last_name = @last_name")
+                .AppendSql(",sex = @sex")
                 .AppendSql(",mail = @mail")
                 .AppendSql(",birthday = @birthday")
                 .AppendSql(",zip_code = @zip_code")
@@ -345,6 +349,7 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@user_id", model.UserId);
             paramList.Add("@first_name", model.FirstName);
             paramList.Add("@last_name", model.LastName);
+            paramList.Add("@sex", model.Sex);
             paramList.Add("@mail", model.Mail);
             paramList.Add("@birthday", model.Birthday);
             paramList.Add("@zip_code", model.ZipCode);
@@ -464,6 +469,7 @@ namespace MySimpleLauncher.Data {
             this.UserId = base.GetString("user_id");
             this.FirstName = base.GetString("first_name");
             this.LastName = base.GetString("last_name");
+            this.Sex = base.GetString("sex");
             this.Mail = base.GetString("mail");
             this.Birthday = base.GetString("birthday");
             this.ZipCode = base.GetString("zip_code");

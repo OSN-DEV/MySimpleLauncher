@@ -107,6 +107,7 @@
     <Compile Include="Data\AppSettings.cs" />
     <Compile Include="Data\CategoriesTable.cs" />
     <Compile Include="Data\ItemsTable.cs" />
+    <Compile Include="Data\ProfileDatabase.cs" />
     <Compile Include="Data\ProfilesTable.cs" />
     <Compile Include="Data\SystemDatabase.cs" />
     <Compile Include="Model\CategoryModel.cs" />

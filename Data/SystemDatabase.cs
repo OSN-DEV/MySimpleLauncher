@@ -9,7 +9,7 @@ using MyLib.Data.Sqlite;
 namespace MySimpleLauncher.Data {
     internal class SystemDatabase : Database {
         #region Declaration
-        private static string _databaseFile = AppCommon.GetAppPath() + "appdata.db";
+        private static readonly string _databaseFile = AppCommon.GetAppPath() + "appdata.db";
         #endregion
 
         #region Constructor
