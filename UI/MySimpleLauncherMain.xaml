@@ -76,7 +76,7 @@
         <GridSplitter Grid.Column="1" Grid.Row="1" Width="5" HorizontalAlignment="Center" Grid.RowSpan="2"/>
 
 
-        <ListView Name="cItemList" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}" ContextMenuOpening="ItemList_ContextMenuOpening" AllowDrop="True" Drop="ItemList_Drop" MouseDoubleClick="ItemList_MouseDoubleClick" KeyDown="ItemList_KeyDown" >
+        <ListView Name="cItemList" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}" ContextMenuOpening="ItemList_ContextMenuOpening" AllowDrop="True" Drop="ItemList_Drop" MouseDoubleClick="ItemList_MouseDoubleClick" KeyDown="ItemList_KeyDown" SelectionChanged="ItemList_SelectionChanged" >
             <ListView.ItemContainerStyle >
                 <Style TargetType="ListViewItem" >
                     <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -136,7 +136,7 @@
 
         <StatusBar Grid.Row="3" Grid.ColumnSpan="3" Height="23" HorizontalAlignment="Stretch" Name="cFileStatus" VerticalAlignment="Bottom">
             <StatusBarItem>
-                <TextBlock x:Name="cFileInfo" />
+                <TextBlock Name="cFileInfo" />
             </StatusBarItem>
         </StatusBar>
 

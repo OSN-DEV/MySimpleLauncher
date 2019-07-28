@@ -452,7 +452,7 @@ namespace MySimpleLauncher.UI {
             if (null == this.cCategoryList.SelectedItem) {
                 e.Handled = true;
             } else {
-                var item = cItemList.GetItemAt(Mouse.GetPosition(this.cItemList));
+                var item = this.cItemList.GetItemAt(Mouse.GetPosition(this.cItemList));
                 var isItemSelected = (null != item);
                 this._itemMenu.SetMenuItemEnabled((int)ContextMenuId.Edit, isItemSelected);
                 this._itemMenu.SetMenuItemEnabled((int)ContextMenuId.Delete, isItemSelected);
@@ -508,6 +508,24 @@ namespace MySimpleLauncher.UI {
                     _findSelf = false;
                     NativeMethods.EnumWindows(new NativeMethods.EnumWindowsDelegate(EnumWindowCallBack), IntPtr.Zero);
                 });
+            }
+        }
+
+
+        private void ItemList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            this.cFileInfo.Text = "";
+            if (!(this.cItemList.SelectedItem is ItemModel model)) {
+                return;
+            }
+            var util = FileUtil.Create(model.FilePath);
+            if (null != util) {
+                var status = new StringBuilder();
+                status.Append("Modifeied : " + util.LastWriteTimeString);
+                status.Append(" ");
+                if (!util.IsDirectory) {
+                    status.Append("Size : " + util.FileSizeString);
+                }
+                this.cFileInfo.Text = status.ToString();
             }
         }
 
@@ -705,6 +723,7 @@ namespace MySimpleLauncher.UI {
         private bool IsModifierPressed(ModifierKeys key) {
             return (Keyboard.Modifiers & key) != ModifierKeys.None;
         }
+
         #endregion
 
     }
