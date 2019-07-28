@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        xmlns:u="clr-namespace:MySimpleLauncher.Component"
         Title="MySimpleLauncher" Height="450" Width="800" WindowStartupLocation="CenterScreen" 
         Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" KeyDown="MySimpleLauncherMain_KeyDown" Closed="MySimpleLauncherMain_Closed">
     <Window.Resources>
@@ -101,25 +102,17 @@
                     </Style.Triggers>
                 </Style>
             </ListView.ItemContainerStyle>
-            <!--<ListView.ItemTemplate>
-                <GridViewColumn DisplayMemberBinding="{Binding DisplayName}" Width="{Binding ActualWidth, ElementName=cItemList}">
-                    <GridViewColumnHeader Content="DisplayName" FontSize="{StaticResource DefaultFonSize}" Padding="5"/>
-                </GridViewColumn>
-            </ListView.ItemTemplate>-->
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="30" HeaderContainerStyle="{StaticResource GridViewColumnHeaderDisabledStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid VerticalAlignment="Bottom" >
-                                    <Image Source="{Binding Icon}" Height="30" HorizontalAlignment="Stretch" Stretch="Uniform" VerticalAlignment="Stretch" />
+                                    <u:CustomImage Source="{Binding IconSource}" Height="30" HorizontalAlignment="Stretch" Stretch="Uniform" VerticalAlignment="Stretch" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <!--<GridViewColumn DisplayMemberBinding="{Binding DisplayName}" Width="Auto">
-                        <GridViewColumnHeader Content="DisplayName" FontSize="{StaticResource DefaultFonSize}" Background="Red" Padding="5"/>
-                    </GridViewColumn>-->
                     <GridViewColumn Width="Auto" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
                         <GridViewColumnHeader Content="DisplayName" FontSize="{StaticResource DefaultFonSize}"  Padding="5" />
                         <GridViewColumn.CellTemplate>

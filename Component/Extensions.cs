@@ -27,25 +27,5 @@ namespace MySimpleLauncher.Component {
         }
         #endregion
 
-        #region BitmapImage
-        /// <summary>
-        /// convert StreamSource to byte array
-        /// </summary>
-        /// <param name="bitmapImage">this</param>
-        /// <returns>byte array</returns>
-        internal static byte[] ConvertToBytes(this BitmapImage bitmapImage) {
-            if (null == bitmapImage) {
-                return null;
-            }
-            byte[] data = null;
-            using (var stream = new MemoryStream()) {
-                var encoder = new BmpBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-                encoder.Save(stream);
-                data = stream.ToArray();
-            }
-            return data;
-        }
-        #endregion
     }
 }

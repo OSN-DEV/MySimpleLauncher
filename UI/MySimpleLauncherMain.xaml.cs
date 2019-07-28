@@ -476,6 +476,13 @@ namespace MySimpleLauncher.UI {
                     } else {
                         model.DisplayName = fileUtil.Name;
                     }
+                    if (fileUtil.Exists()) {
+                        if (fileUtil.IsDirectory) {
+                            //model.Icon = AppCommon.GetBitmapImageFromFolderIcon(fileUtil.FilePath);
+                        } else {
+                            //model.Icon = AppCommon.GetBitmapImageFromAppIcon(fileUtil.FilePath);
+                        }
+                    }
                     model.FilePath = file;
                     model.CategoryId = ((CategoryModel)this.cCategoryList.SelectedItem).Id;
                     model.Id = table.Insert(model);

@@ -46,7 +46,7 @@
 
                     <StackPanel Grid.Row="0" Grid.Column="0" Background="Silver" Width="42" Height="42" HorizontalAlignment="Left" Margin="0,0,0,5" MouseDown="Icon_MouseDown" Cursor="Hand">
                         <!--<Image Width="40" Height="40" Name="cIcon" />-->
-                        <Image Width="40" Height="40" Name="cIcon" Source="{Binding Icon,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+                        <u:CustomImage Width="40" Height="40" x:Name="cIcon" />
                     </StackPanel>
 
                     <TextBlock       Grid.Column="0" Grid.Row="1" Text="Display Name"/>

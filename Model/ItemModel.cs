@@ -31,14 +31,44 @@ namespace MySimpleLauncher.Model {
 
         // General
         public string DisplayName { set; get; }
-        private BitmapImage _icon = null;
-        public BitmapImage Icon {
+        private byte[] _icon = null;
+        public byte[] Icon {
             set {
                 this._icon = value;
                 this.OnPropertyChanged("Icon");
+                this.OnPropertyChanged("IconSource");
             }
             get {
                 return this._icon;
+            }
+        }
+
+        public IList<byte> IconList {
+            set {
+                this._icon = value.ToArray();
+                this.OnPropertyChanged("Icon");
+            }
+            get {
+                return (IList<byte>)this._icon.ToList();
+            }
+        }
+        public BitmapSource IconSource {
+            set { }
+            get {
+                if (null == this._icon) {
+                    return null;
+                } else {
+                    // バインドの処理がまともに動かないのでひとまずやっつけで作成
+                    using (var stream = new System.IO.MemoryStream(this._icon)) {
+                        var bitmapDecoder = BitmapDecoder.Create(
+                                            stream,
+                                            BitmapCreateOptions.PreservePixelFormat,
+                                            BitmapCacheOption.OnLoad);
+                        var writable = new WriteableBitmap(bitmapDecoder.Frames.Single());
+                        writable.Freeze();
+                        return (BitmapSource)writable;
+                    }
+                }
             }
         }
         public string FilePath { set; get; }
@@ -150,6 +180,56 @@ namespace MySimpleLauncher.Model {
         #endregion
 
         #region Internal Method
+        internal void CopyFrom(ItemModel source) {
+            this.Id = source.Id;
+            this.CategoryId = source.CategoryId;
+            this.DisplayName = source.DisplayName;
+            this.Icon = source.Icon;
+            this.FilePath = source.FilePath;
+            this.User = source.User;
+            this.Password = source.Password;
+            this.Comment = source.Comment;
+            this.UserId = source.UserId;
+            this.FirstName = source.FirstName;
+            this.LastName = source.LastName;
+            this.NickName = source.NickName;
+            this.Sex = source.Sex;
+            this.Mail = source.Mail;
+            this.Birthday = source.Birthday;
+            this.ZipCode = source.ZipCode;
+            this.Prefecture = source.Prefecture;
+            this.Address1 = source.Address1;
+            this.Address2 = source.Address2;
+            this.Tel = source.Tel;
+            this.SecretQuestion1 = source.SecretQuestion1;
+            this.SecretAnswer1 = source.SecretAnswer1;
+            this.SecretQuestion2 = source.SecretQuestion2;
+            this.SecretAnswer2 = source.SecretAnswer2;
+            this.SecretQuestion3 = source.SecretQuestion3;
+            this.SecretAnswer3 = source.SecretAnswer3;
+            this.UserKey1 = source.UserKey1;
+            this.UserValue1 = source.UserValue1;
+            this.UserKey2 = source.UserKey2;
+            this.UserValue2 = source.UserValue2;
+            this.UserKey3 = source.UserKey3;
+            this.UserValue3 = source.UserValue3;
+            this.UserKey4 = source.UserKey4;
+            this.UserValue4 = source.UserValue4;
+            this.UserKey5 = source.UserKey5;
+            this.UserValue5 = source.UserValue5;
+            this.UserKey6 = source.UserKey6;
+            this.UserValue6 = source.UserValue6;
+            this.UserKey7 = source.UserKey7;
+            this.UserValue7 = source.UserValue7;
+            this.UserKey8 = source.UserKey8;
+            this.UserValue8 = source.UserValue8;
+            this.UserKey9 = source.UserKey9;
+            this.UserValue9 = source.UserValue9;
+            this.UserKey10 = source.UserKey10;
+            this.UserValue10 = source.UserValue10;
+            this.RowOrder = source.RowOrder;
+        }
+
         internal string GetSearchKeyword() {
             var keyword = new System.Text.StringBuilder();
             keyword.Append(this.DisplayName)

@@ -10,7 +10,7 @@ namespace MySimpleLauncher.Data {
         internal long Id { set; get; }
         internal long CategoryId { set; get; }
         internal string DisplayName { set; get; }
-        internal BitmapImage Icon { set; get; }
+        internal byte[] Icon { set; get; }
         internal string FilePath { set; get; }
         internal string User { set; get; }
         internal string Password { set; get; }
@@ -244,7 +244,7 @@ namespace MySimpleLauncher.Data {
             var paramList = new ParameterList();
             paramList.Add("@category_id", model.CategoryId);
             paramList.Add("@display_name", model.DisplayName);
-            paramList.Add("@icon", model.Icon.ConvertToBytes());
+            paramList.Add("@icon", model.Icon);
             paramList.Add("@file_path", model.FilePath);
             paramList.Add("@user", model.User);
             paramList.Add("@password", model.Password);
@@ -355,7 +355,7 @@ namespace MySimpleLauncher.Data {
             paramList.Add("@id", model.Id);
             paramList.Add("@category_id", model.CategoryId);
             paramList.Add("@display_name", model.DisplayName);
-            paramList.Add("@icon", model.Icon.ConvertToBytes());
+            paramList.Add("@icon", model.Icon);
             paramList.Add("@file_path", model.FilePath);
             paramList.Add("@user", model.User);
             paramList.Add("@password", model.Password);
@@ -477,7 +477,7 @@ namespace MySimpleLauncher.Data {
             this.Id = base.GetInt("id");
             this.CategoryId = base.GetInt("category_id");
             this.DisplayName = base.GetString("display_name");
-            this.Icon =  MySimpleLauncher.Util.AppCommon.GetBitmapImage(base.GetBlob("icon"));
+            this.Icon =  base.GetBlob("icon");
             this.FilePath = base.GetString("file_path");
             this.User = base.GetString("user");
             this.Password = base.GetString("password");

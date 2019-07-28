@@ -33,17 +33,19 @@ namespace MySimpleLauncher.UI {
 
         internal EditItem(Window owner, bool isReadOnly = false, ItemModel model = null) : this() {
             this.Owner = owner;
+            var localModel = new ItemModel();
             if (null == model) {
                 this._model = new ItemModel();
             } else {
                 this._model = model;
+                localModel.CopyFrom(model);
             }
-            this._model.IsReadOnly = isReadOnly;
-            this.DataContext = this._model;
+            localModel.IsReadOnly = isReadOnly;
+            this.DataContext = localModel;
+            this.cIcon.ByteSource = localModel.Icon;
             this.cEdit.Visibility = isReadOnly ? Visibility.Visible : Visibility.Hidden;
             this.cOK.Visibility = isReadOnly ? Visibility.Hidden : Visibility.Visible;
             this.cOK.IsEnabled = (0 < this._model.DisplayName?.Length);
-            this.DataContext = this._model;
         }
         #endregion
 
@@ -53,7 +55,9 @@ namespace MySimpleLauncher.UI {
         }
 
         private void Ok_Click(object sender, RoutedEventArgs e) {
-            this._model.Icon = (BitmapImage)this.cIcon.Source;
+            var model = this.DataContext as ItemModel;
+            this._model.CopyFrom(model);
+            this._model.Icon = (byte[])this.cIcon.ByteSource;
             this.DialogResult = true;
         }
 
@@ -68,26 +72,18 @@ namespace MySimpleLauncher.UI {
         }
 
         private void FilePath_TextValueChanged(object sender, EventArgs e) {
-            if (null != this.cIcon.Source) {
-                return;
-            }
-
+            this.cIcon.ClearSource();
             if (0 < this.cFilePath.Text.Length && this.cFilePath.Text.StartsWith("http")) {
                 if (!this._loadingIcon) {
                     this._loadingIcon = true;
                     this._browser.Navigate(this.cFilePath.Text);
                 }
             } else if (0 < this.cFilePath.Text.Length && File.Exists(this.cFilePath.Text)) {
-                using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(this.cFilePath.Text))
-                using (var stream = new MemoryStream()) {
-                    var encoder = new BmpBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions())));
-                    encoder.Save(stream);
-                    this.cIcon.Source = AppCommon.GetBitmapImage(stream);
-                }
+                this.cIcon.SetAppIcon(this.cFilePath.Text);
             } else if (0 < this.cFilePath.Text.Length && Directory.Exists(this.cFilePath.Text)) {
-                // https://www.doraxdora.com/blog/2018/01/31/post-3807/
-                // win apiを使用する必要あり
+                this.cIcon.SetAppIcon(this.cFilePath.Text);
+            } else {
+                ((ItemModel)this.DataContext).Icon = null;
             }
         }
 
@@ -100,7 +96,7 @@ namespace MySimpleLauncher.UI {
             if (true != dialog.ShowDialog()) {
                 return;
             }
-            this.cIcon.Source = AppCommon.GetBitmapImage(dialog.FileName);
+            this.cIcon.SetImageFile(dialog.FileName);
         }
 
         private void Browser_DocumentCompleted(object sender, System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e) {
@@ -138,7 +134,7 @@ namespace MySimpleLauncher.UI {
                 using (var stream = new MemoryStream()) {
                     var resStream = WebRequest.Create(url).GetResponse().GetResponseStream();
                     resStream.CopyTo(stream);
-                    this.cIcon.Source = AppCommon.GetBitmapImage(stream);
+                    this.cIcon.ByteSource = stream.GetBuffer();
                 }
             } catch (Exception ex) {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
