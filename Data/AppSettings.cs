@@ -6,6 +6,7 @@ namespace MySimpleLauncher.Data {
         #region Declaration   
         public long CurrentProfileId { set; get; } = -1;
         public int CategoryListSelectedIndex { set; get; } = -1;
+        public bool ShowStatusBar { set; get; }
 
         private readonly string _settingFile = AppCommon.GetAppPath() + @"\app.settings";
         #endregion
@@ -19,6 +20,7 @@ namespace MySimpleLauncher.Data {
             if (null != instance) {
                 this.CurrentProfileId = instance.CurrentProfileId;
                 this.CategoryListSelectedIndex = instance.CategoryListSelectedIndex;
+                this.ShowStatusBar = instance.ShowStatusBar;
             }
         }
 

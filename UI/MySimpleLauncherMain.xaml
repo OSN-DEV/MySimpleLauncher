@@ -20,13 +20,25 @@
             <ColumnDefinition Width="318*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0" Background="#DEE7FF" >
+
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Name="cAppMenu" Visibility="Collapsed">
+            <MenuItem Header="File(_F)">
+                <MenuItem Header="Exit(_X)" Click="FileMenuExit_Click"/>
+            </MenuItem>
+            <MenuItem Header="Display(_D)">
+                <MenuItem IsCheckable="True" Header="Show StatusBar" Click="DisplayMenuShowStatusBar_Click" Name="cDisplayMenuShowStatusBar" />
+            </MenuItem>
+        </Menu>
+        
+        <StackPanel Grid.Row="1" Grid.Column="0" Background="#DEE7FF" >
             <Button Content="No Profilexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaaaaaaaaaaax" Style="{StaticResource LabelButton}" Height="50" Click="ProfileList_Click" Name="cProfileList" />
         </StackPanel>
-        <ListView Name="cCategoryList" Grid.Column="0" Grid.Row="1" Height="Auto" ItemsSource="{Binding}" 
+        <ListView Grid.Row="2" Name="cCategoryList" Grid.Column="0"  Height="Auto" ItemsSource="{Binding}" 
                   ContextMenuOpening="CategoryList_ContextMenuOpening" SelectionChanged="CategoryList_SelectionChanged" KeyDown="CategoryList_KeyDown" SelectionMode="Single"> 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -61,10 +73,10 @@
             </ListView.ItemContainerStyle>
         </ListView>
         
-        <GridSplitter Grid.Column="1" Grid.Row="0" Width="5" HorizontalAlignment="Center" Grid.RowSpan="2"/>
+        <GridSplitter Grid.Column="1" Grid.Row="1" Width="5" HorizontalAlignment="Center" Grid.RowSpan="2"/>
 
 
-        <ListView Name="cItemList" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" ItemsSource="{Binding}" ContextMenuOpening="ItemList_ContextMenuOpening" AllowDrop="True" Drop="ItemList_Drop" MouseDoubleClick="ItemList_MouseDoubleClick" KeyDown="ItemList_KeyDown" >
+        <ListView Name="cItemList" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}" ContextMenuOpening="ItemList_ContextMenuOpening" AllowDrop="True" Drop="ItemList_Drop" MouseDoubleClick="ItemList_MouseDoubleClick" KeyDown="ItemList_KeyDown" >
             <ListView.ItemContainerStyle >
                 <Style TargetType="ListViewItem" >
                     <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -118,11 +130,15 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-
                 </GridView>
             </ListView.View>
         </ListView>
 
+        <StatusBar Grid.Row="3" Grid.ColumnSpan="3" Height="23" HorizontalAlignment="Stretch" Name="cFileStatus" VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="cFileInfo" />
+            </StatusBarItem>
+        </StatusBar>
 
     </Grid>
 </Window>

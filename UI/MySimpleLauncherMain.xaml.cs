@@ -9,7 +9,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,11 +22,7 @@ namespace MySimpleLauncher.UI {
     /// </summary>
     public partial class MySimpleLauncherMain : Window {
 
-
         #region Declaration
-        // https://qiita.com/katabamisan/items/081547f42512e93a31ab
-        // http://d.hatena.ne.jp/maeyan/20091227/1261848549
-        // https://ja.stackoverflow.com/questions/29568/c%E3%81%AB%E3%81%A6%E9%9D%9E%E3%82%A2%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%81%AE%E3%83%97%E3%83%AD%E3%82%BB%E3%82%B9%E3%81%B8%E3%82%AD%E3%83%BC%E5%85%A5%E5%8A%9B%E3%81%97%E3%81%9F%E3%81%84
         private readonly CustomContextMenu _categoryMenu = new CustomContextMenu();
         private readonly CustomContextMenu _itemMenu = new CustomContextMenu();
         private readonly AppSettings _settings;
@@ -44,7 +39,7 @@ namespace MySimpleLauncher.UI {
 
         private delegate bool SendVKeyNativeDelegate(uint keyStroke, NativeMethods.KeySet keyset);
         private readonly HotKeyHelper _hotkey;
-
+        private bool _allowClosing = false;
 
         /// <summary>
         /// Id for context menu
@@ -89,7 +84,9 @@ namespace MySimpleLauncher.UI {
             this.cCategoryList.DataContext = this._categoryList;
             this.cItemList.DataContext = this._itemList;
 
-            // https://blog.hiros-dot.net/?page_id=4104
+            this.cDisplayMenuShowStatusBar.IsChecked = this._settings.ShowStatusBar;
+            this.cFileStatus.Visibility = this._settings.ShowStatusBar ? Visibility.Visible : Visibility.Collapsed;
+
             this.cCategoryList.ContextMenu = this._categoryMenu;
             this.cItemList.ContextMenu = this._itemMenu;
 
@@ -123,10 +120,12 @@ namespace MySimpleLauncher.UI {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void MySimpleLauncherMain_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-            e.Cancel = true;
-            this.WindowState = WindowState.Minimized;
-            this.ShowInTaskbar = false;
-            this._notifyIcon.Visible = true;
+            if (!this._allowClosing) {
+                e.Cancel = true;
+                this.WindowState = WindowState.Minimized;
+                this.ShowInTaskbar = false;
+                this._notifyIcon.Visible = true;
+            }
         }
 
         /// <summary>
@@ -139,16 +138,43 @@ namespace MySimpleLauncher.UI {
         }
 
         /// <summary>
+        /// [File] - [Exit]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FileMenuExit_Click(object sender, RoutedEventArgs e) {
+            this._allowClosing = true;
+            this.Close();
+        }
+
+        /// <summary>
+        /// [Display] - [Show Status Bar]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DisplayMenuShowStatusBar_Click(object sender, RoutedEventArgs e) {
+            if (this.cDisplayMenuShowStatusBar.IsChecked) {
+                this.cFileStatus.Visibility = Visibility.Visible;
+            } else {
+                this.cFileStatus.Visibility = Visibility.Collapsed;
+            }
+            this._settings.ShowStatusBar = this.cDisplayMenuShowStatusBar.IsChecked;
+            this._settings.Save();
+        }
+
+        /// <summary>
         /// key down
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void MySimpleLauncherMain_KeyDown(object sender, KeyEventArgs e) {
-              if (e.Key == Key.A && IsModifierPressed(ModifierKeys.Control) && IsModifierPressed(ModifierKeys.Shift)) {
+            if (e.Key == Key.A && IsModifierPressed(ModifierKeys.Control) && IsModifierPressed(ModifierKeys.Shift)) {
                 e.Handled = true;
                 if (null != this.cCategoryList.SelectedItem) {
                     this.ItemContextMenuAdd_Click(null, null);
                 }
+            } else if (IsModifierPressed(ModifierKeys.Alt)) {
+                this.cAppMenu.Visibility = (this.cAppMenu.Visibility == Visibility.Visible) ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
