@@ -81,7 +81,7 @@ namespace MySimpleLauncher.UI {
             } else if (0 < this.cFilePath.Text.Length && File.Exists(this.cFilePath.Text)) {
                 this.cIcon.SetAppIcon(this.cFilePath.Text);
             } else if (0 < this.cFilePath.Text.Length && Directory.Exists(this.cFilePath.Text)) {
-                this.cIcon.SetAppIcon(this.cFilePath.Text);
+                this.cIcon.SetDirectoryIcon(this.cFilePath.Text);
             } else {
                 ((ItemModel)this.DataContext).Icon = null;
             }
