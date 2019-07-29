@@ -567,6 +567,7 @@ namespace MySimpleLauncher.UI {
             DoEvents();
             System.Windows.Forms.SendKeys.SendWait("{ENTER}");
         }
+
         #endregion
 
         #region Private Method

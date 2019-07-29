@@ -105,6 +105,7 @@
     <Compile Include="Component\CustomContextMenu.cs" />
     <Compile Include="Component\CustomImage.cs" />
     <Compile Include="Component\Extensions.cs" />
+    <Compile Include="Component\WidthConverter.cs" />
     <Compile Include="Data\AppSettings.cs" />
     <Compile Include="Data\CategoriesTable.cs" />
     <Compile Include="Data\ItemsTable.cs" />

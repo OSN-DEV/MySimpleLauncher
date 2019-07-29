@@ -9,6 +9,7 @@
         Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" KeyDown="MySimpleLauncherMain_KeyDown" Closed="MySimpleLauncherMain_Closed">
     <Window.Resources>
         <ResourceDictionary>
+            <u:WidthConverter x:Key="widthConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/MySimpleLauncher;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -77,7 +78,10 @@
         <GridSplitter Grid.Column="1" Grid.Row="1" Width="5" HorizontalAlignment="Center" Grid.RowSpan="2"/>
 
 
-        <ListView Name="cItemList" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}" ContextMenuOpening="ItemList_ContextMenuOpening" AllowDrop="True" Drop="ItemList_Drop" MouseDoubleClick="ItemList_MouseDoubleClick" KeyDown="ItemList_KeyDown" SelectionChanged="ItemList_SelectionChanged" >
+        <ListView Name="cItemList" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}"  
+                  SelectionMode="Single"
+                  ContextMenuOpening="ItemList_ContextMenuOpening" AllowDrop="True" Drop="ItemList_Drop" 
+                  MouseDoubleClick="ItemList_MouseDoubleClick" KeyDown="ItemList_KeyDown" SelectionChanged="ItemList_SelectionChanged" >
             <ListView.ItemContainerStyle >
                 <Style TargetType="ListViewItem" >
                     <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -113,7 +117,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                    <GridViewColumn Width="{Binding ElementName=cItemList, Path=ActualWidth, Converter={StaticResource widthConverter}, ConverterParameter=3}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
                         <GridViewColumnHeader Content="DisplayName" FontSize="{StaticResource DefaultFonSize}"  Padding="5" />
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
