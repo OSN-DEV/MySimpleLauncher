@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:u="clr-namespace:MySimpleLauncher.Component"
-        Title="MySimpleLauncher" Height="450" Width="800" WindowStartupLocation="CenterScreen" 
+        Title="MySimpleLauncher" Height="350" Width="500" WindowStartupLocation="CenterScreen" 
         Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" KeyDown="MySimpleLauncherMain_KeyDown" Closed="MySimpleLauncherMain_Closed">
     <Window.Resources>
         <ResourceDictionary>
@@ -17,7 +17,7 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition MinWidth="150" Width="150"/>
             <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="318*"/>
         </Grid.ColumnDefinitions>

@@ -175,6 +175,10 @@ namespace MySimpleLauncher.UI {
                 }
             } else if (IsModifierPressed(ModifierKeys.Alt)) {
                 this.cAppMenu.Visibility = (this.cAppMenu.Visibility == Visibility.Visible) ? Visibility.Collapsed : Visibility.Visible;
+            } else if (e.Key == Key.Escape) {
+                this.WindowState = WindowState.Minimized;
+                this.ShowInTaskbar = false;
+                this._notifyIcon.Visible = true;
             }
         }
 

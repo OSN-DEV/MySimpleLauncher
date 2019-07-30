@@ -68,7 +68,7 @@ namespace MySimpleLauncher.UI {
         }
 
         private void DisplayName_TextChanged(object sender, TextChangedEventArgs e) {
-            this.cOK.IsEnabled = (0 < this._model.DisplayName.Length);
+            this.cOK.IsEnabled = (0 < this.cDisplayName.Text.Length);
         }
 
         private void FilePath_TextValueChanged(object sender, EventArgs e) {
