@@ -1,10 +1,10 @@
-﻿using System;
+﻿using MySimpleLauncher.Data;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel;
-using MySimpleLauncher.Data;
 using System.Windows.Media.Imaging;
 
 
@@ -30,7 +30,17 @@ namespace MySimpleLauncher.Model {
         public int RowOrder { set; get; }
 
         // General
-        public string DisplayName { set; get; }
+        private string _displayName = "";
+        public string DisplayName {
+            set {
+                this._displayName = value;
+                this.OnPropertyChanged("DisplayName");
+            }
+            get {
+                return this._displayName;
+            }
+        }
+
         private byte[] _icon = null;
         public byte[] Icon {
             set {

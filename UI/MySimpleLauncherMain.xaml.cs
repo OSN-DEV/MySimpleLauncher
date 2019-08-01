@@ -508,7 +508,9 @@ namespace MySimpleLauncher.UI {
         }
 
         private void ItemList_KeyDown(object sender, KeyEventArgs e) {
-            if (e.Key == Key.U && IsModifierPressed(ModifierKeys.Control)) {
+            var selectedIndex = this.cItemList.SelectedIndex;
+            bool updateOrder = false;
+            if (e.Key == Key.O && IsModifierPressed(ModifierKeys.Control)) {
                 e.Handled = true;
                 var itemsModel = this.cItemList.SelectedItem as ItemModel;
                 MyLibUtil.RunApplication(itemsModel.FilePath, false);
@@ -519,6 +521,35 @@ namespace MySimpleLauncher.UI {
                     _findSelf = false;
                     NativeMethods.EnumWindows(new NativeMethods.EnumWindowsDelegate(EnumWindowCallBack), IntPtr.Zero);
                 });
+            } else if (Key.U == e.Key && this.IsModifierPressed(ModifierKeys.Shift) && this.IsModifierPressed(ModifierKeys.Control)) {
+                if (selectedIndex <= 0) {
+                    return;
+                }
+                var model = this._itemList[selectedIndex];
+                this._itemList.Remove(model);
+                selectedIndex--;
+                this._itemList.Insert(selectedIndex, model);
+                updateOrder = true;
+                e.Handled = true;
+            } else if (Key.D == e.Key && this.IsModifierPressed(ModifierKeys.Shift) && this.IsModifierPressed(ModifierKeys.Control)) {
+                if (-1 == selectedIndex || this._itemList.Count - 1 <= selectedIndex) {
+                    return;
+                }
+                var model = this._itemList[selectedIndex];
+                this._itemList.Remove(model);
+                selectedIndex++;
+                this._itemList.Insert(selectedIndex, model);
+                updateOrder = true;
+                e.Handled = true;
+            }
+            if (updateOrder) {
+                using (var table = new ItemsTable(this._profileDatabase)) {
+                    if (table.UpdateRowOrdersByIds(this._itemList) == 0) {
+                        AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToUpdate, "item"));
+                    } else {
+                        this.cItemList.SelectedIndex = selectedIndex;
+                    }
+                }
             }
         }
 
