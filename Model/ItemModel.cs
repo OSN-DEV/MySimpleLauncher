@@ -68,15 +68,19 @@ namespace MySimpleLauncher.Model {
                 if (null == this._icon) {
                     return null;
                 } else {
-                    // バインドの処理がまともに動かないのでひとまずやっつけで作成
-                    using (var stream = new System.IO.MemoryStream(this._icon)) {
-                        var bitmapDecoder = BitmapDecoder.Create(
-                                            stream,
-                                            BitmapCreateOptions.PreservePixelFormat,
-                                            BitmapCacheOption.OnLoad);
-                        var writable = new WriteableBitmap(bitmapDecoder.Frames.Single());
-                        writable.Freeze();
-                        return (BitmapSource)writable;
+                    try {
+                        // バインドの処理がまともに動かないのでひとまずやっつけで作成
+                        using (var stream = new System.IO.MemoryStream(this._icon)) {
+                            var bitmapDecoder = BitmapDecoder.Create(
+                                                stream,
+                                                BitmapCreateOptions.PreservePixelFormat,
+                                                BitmapCacheOption.OnLoad);
+                            var writable = new WriteableBitmap(bitmapDecoder.Frames.Single());
+                            writable.Freeze();
+                            return (BitmapSource)writable;
+                        }
+                    } catch {
+                        return null;
                     }
                 }
             }
