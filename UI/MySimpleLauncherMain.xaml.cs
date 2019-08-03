@@ -30,7 +30,7 @@ namespace MySimpleLauncher.UI {
         private readonly System.Windows.Forms.NotifyIcon _notifyIcon = new System.Windows.Forms.NotifyIcon();
 
         private readonly ObservableCollection<CategoryModel> _categoryList = new ObservableCollection<CategoryModel>();
-        private readonly ObservableCollection<ItemModel> _itemList = new ObservableCollection<ItemModel>();
+        private ObservableCollection<ItemModel> _itemList = new ObservableCollection<ItemModel>();
 
         private ProfileDatabase _profileDatabase;
         private static MySimpleLauncherMain _self;
@@ -40,6 +40,7 @@ namespace MySimpleLauncher.UI {
         private delegate bool SendVKeyNativeDelegate(uint keyStroke, NativeMethods.KeySet keyset);
         private readonly HotKeyHelper _hotkey;
         private bool _allowClosing = false;
+        private bool _orderDeschend = false;
 
         /// <summary>
         /// Id for context menu
@@ -112,6 +113,7 @@ namespace MySimpleLauncher.UI {
                     }
                 }
             }
+            this.SetWindowsState(true);
         }
 
         /// <summary>
@@ -122,9 +124,7 @@ namespace MySimpleLauncher.UI {
         private void MySimpleLauncherMain_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             if (!this._allowClosing) {
                 e.Cancel = true;
-                this.WindowState = WindowState.Minimized;
-                this.ShowInTaskbar = false;
-                this._notifyIcon.Visible = true;
+                this.SetWindowsState(true);
             }
         }
 
@@ -270,6 +270,7 @@ namespace MySimpleLauncher.UI {
             this._settings.CategoryListSelectedIndex = this.cCategoryList.SelectedIndex;
             this._settings.Save();
             this._itemMenu.IsEnabled = true;
+            this._orderDeschend = false;
         }
 
         /// <summary>
@@ -451,7 +452,31 @@ namespace MySimpleLauncher.UI {
             this._itemList.Remove(model);
         }
 
+        /// <summary>
+        /// item header click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ItemListHeader_Click(object sender, RoutedEventArgs e) {
+            if (this._orderDeschend) {
+                this._itemList = new ObservableCollection<ItemModel>(this._itemList.OrderByDescending(n => n.DisplayName));
+            } else {
+                this._itemList = new ObservableCollection<ItemModel>(this._itemList.OrderBy(n => n.DisplayName));
+            }
+            using (var table = new ItemsTable(this._profileDatabase)) {
+                if (table.UpdateRowOrdersByIds(this._itemList) == 0) {
+                    AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToUpdate, "item"));
+                }
+            }
+            this._orderDeschend = !this._orderDeschend;
+            this.cItemList.DataContext = this._itemList;
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ItemList_ContextMenuOpening(object sender, ContextMenuEventArgs e) {
             if (null == this.cCategoryList.SelectedItem) {
                 e.Handled = true;
@@ -510,7 +535,7 @@ namespace MySimpleLauncher.UI {
         private void ItemList_KeyDown(object sender, KeyEventArgs e) {
             var selectedIndex = this.cItemList.SelectedIndex;
             bool updateOrder = false;
-            if (e.Key == Key.O && IsModifierPressed(ModifierKeys.Control)) {
+            if (e.Key == Key.U && IsModifierPressed(ModifierKeys.Control)) {
                 e.Handled = true;
                 var itemsModel = this.cItemList.SelectedItem as ItemModel;
                 MyLibUtil.RunApplication(itemsModel.FilePath, false);
@@ -549,11 +574,16 @@ namespace MySimpleLauncher.UI {
                     } else {
                         this.cItemList.SelectedIndex = selectedIndex;
                     }
+                    this._orderDeschend = false;
                 }
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ItemList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             this.cFileInfo.Text = "";
             if (!(this.cItemList.SelectedItem is ItemModel model)) {
@@ -571,11 +601,13 @@ namespace MySimpleLauncher.UI {
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NotifyMenuShow_Click(object sender, EventArgs e) {
-            this.WindowState = WindowState.Normal;
-            this.ShowInTaskbar = true;
-            this._notifyIcon.Visible = false;
-
+            this.SetWindowsState(false);
         }
 
         private void NotifyMenuExit_Click(object sender, EventArgs e) {
@@ -767,7 +799,18 @@ namespace MySimpleLauncher.UI {
             return (Keyboard.Modifiers & key) != ModifierKeys.None;
         }
 
+        /// <summary>
+        /// set window state
+        /// </summary>
+        /// <param name="minimize">true:minize, false:normalize</param>
+        private void SetWindowsState(bool minimize) {
+            this.WindowState = minimize ? WindowState.Minimized : WindowState.Normal;
+            this.ShowInTaskbar = !minimize;
+            this._notifyIcon.Visible = minimize;
+            if (!minimize) {
+                this.Activate();
+            }
+        }
         #endregion
-
     }
 }

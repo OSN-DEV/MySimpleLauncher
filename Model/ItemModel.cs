@@ -139,7 +139,6 @@ namespace MySimpleLauncher.Model {
         #endregion
 
         #region Constructor
-
         internal ItemModel() { }
 
         internal ItemModel(ItemsTable table) {
@@ -190,6 +189,12 @@ namespace MySimpleLauncher.Model {
             this.UserKey10 = table.UserKey10;
             this.UserValue10 = table.UserValue10;
             this.RowOrder = table.RowOrder;
+        }
+        #endregion
+
+        #region Public Method
+        public override string ToString() {
+            return this.DisplayName;
         }
         #endregion
 

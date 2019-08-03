@@ -118,7 +118,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="{Binding ElementName=cItemList, Path=ActualWidth, Converter={StaticResource widthConverter}, ConverterParameter=3}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                        <GridViewColumnHeader Content="DisplayName" FontSize="{StaticResource DefaultFonSize}"  Padding="5" />
+                        <GridViewColumnHeader Content="DisplayName" FontSize="{StaticResource DefaultFonSize}"  Padding="5" Click="ItemListHeader_Click" />
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
