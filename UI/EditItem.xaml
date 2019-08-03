@@ -114,7 +114,7 @@
                         </Grid>
 
                         <TextBlock       Grid.Column="0" Grid.Row="3" Text="NickName"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="3" Text="{Binding NickName,UpdateSourceTrigger=PropertyChanged}" MaxLength="128" HorizontalAlignment="Stretch" ImeMode="Off" />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="3" Text="{Binding NickName,UpdateSourceTrigger=PropertyChanged}" MaxLength="128" HorizontalAlignment="Stretch" ImeMode="Hiragana" />
 
                         <TextBlock       Grid.Column="0" Grid.Row="4" Text="Sex"  />
                         <u:CustomTextBox Grid.Column="2" Grid.Row="4" Text="{Binding Sex,UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="40" ImeMode="Hiragana" />
@@ -123,7 +123,7 @@
                         <u:CustomTextBox Grid.Column="2" Grid.Row="5" Text="{Binding Mail,UpdateSourceTrigger=PropertyChanged}" MaxLength="128" HorizontalAlignment="Stretch" ImeMode="Disabled" />
 
                         <TextBlock       Grid.Column="0" Grid.Row="6" Text="Birthday"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="6" Text="{Binding Birthday,UpdateSourceTrigger=PropertyChanged}" MaxLength="10" Width="100" ImeMode="Disabled"  />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="6" Text="{Binding Birthday,UpdateSourceTrigger=PropertyChanged}" x:Name="cBirthday" MaxLength="10" Width="100" ImeMode="Disabled" TextValueChanged="Birthday_TextValueChanged"  />
 
                         <TextBlock         Grid.Column="0" Grid.Row="7" Text="Zip Code"  />
                         <u:CustomTextBox   Grid.Column="2" Grid.Row="7" Text="{Binding ZipCode,UpdateSourceTrigger=PropertyChanged}" MaxLength="8" Width="70" ImeMode="Disabled"  />

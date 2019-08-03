@@ -71,6 +71,18 @@ namespace MySimpleLauncher.UI {
             this.cOK.IsEnabled = (0 < this.cDisplayName.Text.Length);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Birthday_TextValueChanged(object sender, EventArgs e) {
+            var birth = this.cBirthday.Text;
+            if (8 == birth.Length) {
+                this.cBirthday.Text = birth.Substring(0, 4) + "/" + birth.Substring(4, 2) + "/" + birth.Substring(6, 2);
+            }
+        }
+
         private void FilePath_TextValueChanged(object sender, EventArgs e) {
             this.cIcon.ClearSource();
             if (0 < this.cFilePath.Text.Length && this.cFilePath.Text.StartsWith("http")) {
@@ -143,5 +155,7 @@ namespace MySimpleLauncher.UI {
         }
 
         #endregion
+
+
     }
 }

@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace MySimpleLauncher.Component {
     #region Declaration
-    internal enum ImeMode { Disabled, Hiragana, Off }
+    internal enum ImeMode { Disabled, Hiragana, Off, DoNotCare }
     #endregion
 
     internal class CustomTextBox : TextBox {
@@ -16,7 +16,7 @@ namespace MySimpleLauncher.Component {
 
         #region Public Property
         // IME の設定の種類
-        internal ImeMode ImeMode { get; set; } = ImeMode.Off;
+        internal ImeMode ImeMode { get; set; } = ImeMode.DoNotCare;
         #endregion
 
         #region Constructor
@@ -36,6 +36,9 @@ namespace MySimpleLauncher.Component {
                         break;
                     case ImeMode.Off:
                         InputMethod.SetPreferredImeState(this, InputMethodState.Off);
+                        break;
+                    default:
+                        InputMethod.SetPreferredImeState(this, InputMethodState.DoNotCare);
                         break;
                 }
             };
