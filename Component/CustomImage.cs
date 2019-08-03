@@ -64,12 +64,7 @@ namespace MySimpleLauncher.Component {
         /// </summary>
         /// <param name="filePath">app file path</param>
         public void SetAppIcon(string filePath) {
-            using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath))
-            using (var stream = new MemoryStream()) {
-                var bmp = icon.ToBitmap();
-                bmp.Save(stream, ImageFormat.Png);
-                this.ByteSource = stream.GetBuffer();
-            }
+            this.ByteSource = GetAppIcon(filePath);
         }
 
         /// <summary>
@@ -77,19 +72,11 @@ namespace MySimpleLauncher.Component {
         /// </summary>
         /// <param name="filePath">directory path</param>
         public void SetDirectoryIcon(string filePath) {
-            var shinfo = new NativeMethods.SHFILEINFO();
-            IntPtr hImg = NativeMethods.SHGetFileInfo(
-              filePath, 0, out shinfo, (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(NativeMethods.SHFILEINFO)),
-              (uint)(NativeMethods.SHGFI.SHGFI_ICON | NativeMethods.SHGFI.SHGFI_LARGEICON));
-            if (IntPtr.Zero != hImg) {
-                using (var icon = System.Drawing.Icon.FromHandle(shinfo.hIcon))
-                using (var stream = new MemoryStream()) {
-                    var bmp = icon.ToBitmap();
-                    bmp.Save(stream, ImageFormat.Png);
-                    this.ByteSource = stream.GetBuffer();
-                }
-            } else {
+            var icon = GetDirectoryIcon(filePath);
+            if (null == icon) {
                 this.ClearSource();
+            } else {
+                this.ByteSource = icon;
             }
         }
 
@@ -102,6 +89,42 @@ namespace MySimpleLauncher.Component {
             using (var memStream = new MemoryStream()) {
                 stream.CopyTo(memStream);
                 this.ByteSource = memStream.GetBuffer();
+            }
+        }
+
+        /// <summary>
+        /// get app icon as byte array
+        /// </summary>
+        /// <param name="filePath">app file path</param>
+        /// <returns>byte array</returns>
+        public static byte[] GetAppIcon(string filePath) {
+            using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath))
+            using (var stream = new MemoryStream()) {
+                var bmp = icon.ToBitmap();
+                bmp.Save(stream, ImageFormat.Png);
+                return stream.GetBuffer();
+            }
+        }
+
+        /// <summary>
+        /// get directory icon as byte array
+        /// </summary>
+        /// <param name="filePath">directory path</param>
+        /// <returns>byte array</returns>
+        public static byte[] GetDirectoryIcon(string filePath) {
+            var shinfo = new NativeMethods.SHFILEINFO();
+            IntPtr hImg = NativeMethods.SHGetFileInfo(
+              filePath, 0, out shinfo, (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(NativeMethods.SHFILEINFO)),
+              (uint)(NativeMethods.SHGFI.SHGFI_ICON | NativeMethods.SHGFI.SHGFI_LARGEICON));
+            if (IntPtr.Zero != hImg) {
+                using (var icon = System.Drawing.Icon.FromHandle(shinfo.hIcon))
+                using (var stream = new MemoryStream()) {
+                    var bmp = icon.ToBitmap();
+                    bmp.Save(stream, ImageFormat.Png);
+                    return stream.GetBuffer();
+                }
+            } else {
+                return null;
             }
         }
         #endregion

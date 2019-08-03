@@ -507,9 +507,9 @@ namespace MySimpleLauncher.UI {
                     }
                     if (fileUtil.Exists()) {
                         if (fileUtil.IsDirectory) {
-                            //model.Icon = AppCommon.GetBitmapImageFromFolderIcon(fileUtil.FilePath);
+                            model.Icon = CustomImage.GetDirectoryIcon(fileUtil.FilePath);
                         } else {
-                            //model.Icon = AppCommon.GetBitmapImageFromAppIcon(fileUtil.FilePath);
+                            model.Icon = CustomImage.GetAppIcon(fileUtil.FilePath);
                         }
                     }
                     model.FilePath = file;
