@@ -69,6 +69,8 @@ namespace MySimpleLauncher.UI {
                                   (_, __) => {
                                       if (!this.ShowInTaskbar) {
                                           NotifyMenuShow_Click(null, null);
+                                      } else {
+                                          this.Activate();
                                       }
                                   }
                                   );
@@ -388,6 +390,7 @@ namespace MySimpleLauncher.UI {
             using (var table = new ItemsTable(this._profileDatabase)) {
                 var model = dialog.Model;
                 model.CategoryId = ((CategoryModel)this.cCategoryList.SelectedItem).Id;
+                model.RowOrder = this._itemList.Count + 1;
                 model.Id = table.Insert(model);
                 if (model.Id < 0) {
                     AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToInsert, "item"));
@@ -534,11 +537,19 @@ namespace MySimpleLauncher.UI {
 
         private void ItemList_KeyDown(object sender, KeyEventArgs e) {
             var selectedIndex = this.cItemList.SelectedIndex;
+            ItemModel model = null;
+            if (0 <= selectedIndex) {
+                model = this._itemList[selectedIndex];
+            }
             bool updateOrder = false;
             if (e.Key == Key.U && IsModifierPressed(ModifierKeys.Control)) {
                 e.Handled = true;
                 var itemsModel = this.cItemList.SelectedItem as ItemModel;
                 MyLibUtil.RunApplication(itemsModel.FilePath, false);
+            } else if (e.Key == Key.C && IsModifierPressed(ModifierKeys.Control) && IsModifierPressed(ModifierKeys.Shift)) {
+                Clipboard.SetText(model.User);
+            } else if (e.Key == Key.X && IsModifierPressed(ModifierKeys.Control) && IsModifierPressed(ModifierKeys.Shift)) {
+                Clipboard.SetText(model.Password);
             } else if (e.Key == Key.V && IsModifierPressed(ModifierKeys.Control)) {
                 e.Handled = true;
                 Task.Run(() => {
@@ -550,7 +561,6 @@ namespace MySimpleLauncher.UI {
                 if (selectedIndex <= 0) {
                     return;
                 }
-                var model = this._itemList[selectedIndex];
                 this._itemList.Remove(model);
                 selectedIndex--;
                 this._itemList.Insert(selectedIndex, model);
@@ -560,7 +570,6 @@ namespace MySimpleLauncher.UI {
                 if (-1 == selectedIndex || this._itemList.Count - 1 <= selectedIndex) {
                     return;
                 }
-                var model = this._itemList[selectedIndex];
                 this._itemList.Remove(model);
                 selectedIndex++;
                 this._itemList.Insert(selectedIndex, model);
@@ -608,6 +617,7 @@ namespace MySimpleLauncher.UI {
         /// <param name="e"></param>
         private void NotifyMenuShow_Click(object sender, EventArgs e) {
             this.SetWindowsState(false);
+            this.Activate();
         }
 
         private void NotifyMenuExit_Click(object sender, EventArgs e) {

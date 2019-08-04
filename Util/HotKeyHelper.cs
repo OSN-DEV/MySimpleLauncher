@@ -50,12 +50,10 @@ namespace MySimpleLauncher.Util {
             var id = msg.wParam.ToInt32();
             var hotkey = this._hotkeyList[id];
 
-            hotkey?.Handler
-                  ?.Invoke(this, EventArgs.Empty);
+            hotkey?.Handler?.Invoke(this, EventArgs.Empty);
         }
 
         private int _hotkeyID = 0x0000;
-
         private const int MAX_HOTKEY_ID = 0xC000;
 
         /// <summary>

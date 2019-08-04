@@ -126,10 +126,10 @@
                         <u:CustomTextBox Grid.Column="2" Grid.Row="6" Text="{Binding Birthday,UpdateSourceTrigger=PropertyChanged}" x:Name="cBirthday" MaxLength="10" Width="100" ImeMode="Disabled" TextValueChanged="Birthday_TextValueChanged"  />
 
                         <TextBlock         Grid.Column="0" Grid.Row="7" Text="Zip Code"  />
-                        <u:CustomTextBox   Grid.Column="2" Grid.Row="7" Text="{Binding ZipCode,UpdateSourceTrigger=PropertyChanged}" MaxLength="8" Width="70" ImeMode="Disabled"  />
+                        <u:CustomTextBox   Grid.Column="2" Grid.Row="7" Text="{Binding ZipCode,UpdateSourceTrigger=PropertyChanged}" MaxLength="8" Width="100" ImeMode="Disabled"  />
 
                         <TextBlock         Grid.Column="0" Grid.Row="8" Text="Prefecture"  />
-                        <u:CustomTextBox   Grid.Column="2" Grid.Row="8" Text="{Binding Prefecture,UpdateSourceTrigger=PropertyChanged}" MaxLength="4" Width="55" ImeMode="Hiragana" />
+                        <u:CustomTextBox   Grid.Column="2" Grid.Row="8" Text="{Binding Prefecture,UpdateSourceTrigger=PropertyChanged}" MaxLength="20" Width="55" ImeMode="Hiragana" />
 
                         <TextBlock       Grid.Column="0" Grid.Row="9" Text="Address1"  />
                         <u:CustomTextBox Grid.Column="2" Grid.Row="9" Text="{Binding Address1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch"  />
@@ -138,7 +138,7 @@
                         <u:CustomTextBox Grid.Column="2" Grid.Row="10" Text="{Binding Address2,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />
 
                         <TextBlock       Grid.Column="0" Grid.Row="11" Text="Tel"  />
-                        <u:CustomTextBox Grid.Column="2" Grid.Row="11" Text="{Binding Tel,UpdateSourceTrigger=PropertyChanged}" ImeMode="Disabled" MaxLength="15" Width="120" />
+                        <u:CustomTextBox Grid.Column="2" Grid.Row="11" Text="{Binding Tel,UpdateSourceTrigger=PropertyChanged}" ImeMode="Disabled" MaxLength="15" Width="140" />
 
                         <TextBlock       Grid.Column="0" Grid.Row="12" Text="Secret QA1"  />
                         <u:CustomTextBox Grid.Column="2" Grid.Row="12" Text="{Binding SecretQuestion1,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" MaxLength="100" HorizontalAlignment="Stretch" />

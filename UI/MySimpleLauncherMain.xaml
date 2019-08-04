@@ -38,7 +38,7 @@
         </Menu>
         
         <StackPanel Grid.Row="1" Grid.Column="0" Background="#DEE7FF" >
-            <Button Content="No Profilexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaaaaaaaaaaax" Style="{StaticResource LabelButton}" Height="50" Click="ProfileList_Click" Name="cProfileList" />
+            <Button Content="No Profile" IsTabStop="False" Style="{StaticResource LabelButton}" Height="50" Click="ProfileList_Click" Name="cProfileList" />
         </StackPanel>
         <ListView Grid.Row="2" Name="cCategoryList" Grid.Column="0"  Height="Auto" ItemsSource="{Binding}" 
                   ContextMenuOpening="CategoryList_ContextMenuOpening" SelectionChanged="CategoryList_SelectionChanged" KeyDown="CategoryList_KeyDown" SelectionMode="Single"> 
@@ -122,7 +122,8 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" Padding="5" FontSize="{StaticResource DefaultFonSize}"/>
+                                    <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" Padding="5" FontSize="{StaticResource DefaultFonSize}" 
+                                               Width="{Binding ElementName=cItemList, Path=ActualWidth, Converter={StaticResource widthConverter}, ConverterParameter=3}" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
