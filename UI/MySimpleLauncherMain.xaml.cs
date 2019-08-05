@@ -542,22 +542,7 @@ namespace MySimpleLauncher.UI {
                 model = this._itemList[selectedIndex];
             }
             bool updateOrder = false;
-            if (e.Key == Key.U && IsModifierPressed(ModifierKeys.Control)) {
-                e.Handled = true;
-                var itemsModel = this.cItemList.SelectedItem as ItemModel;
-                MyLibUtil.RunApplication(itemsModel.FilePath, false);
-            } else if (e.Key == Key.C && IsModifierPressed(ModifierKeys.Control) && IsModifierPressed(ModifierKeys.Shift)) {
-                Clipboard.SetText(model.User);
-            } else if (e.Key == Key.X && IsModifierPressed(ModifierKeys.Control) && IsModifierPressed(ModifierKeys.Shift)) {
-                Clipboard.SetText(model.Password);
-            } else if (e.Key == Key.V && IsModifierPressed(ModifierKeys.Control)) {
-                e.Handled = true;
-                Task.Run(() => {
-                    System.Threading.Thread.Sleep(200);
-                    _findSelf = false;
-                    NativeMethods.EnumWindows(new NativeMethods.EnumWindowsDelegate(EnumWindowCallBack), IntPtr.Zero);
-                });
-            } else if (Key.U == e.Key && this.IsModifierPressed(ModifierKeys.Shift) && this.IsModifierPressed(ModifierKeys.Control)) {
+            if (Key.U == e.Key && this.IsModifierPressed(ModifierKeys.Shift) && this.IsModifierPressed(ModifierKeys.Control)) {
                 if (selectedIndex <= 0) {
                     return;
                 }
@@ -575,6 +560,21 @@ namespace MySimpleLauncher.UI {
                 this._itemList.Insert(selectedIndex, model);
                 updateOrder = true;
                 e.Handled = true;
+            } else if (e.Key == Key.U && IsModifierPressed(ModifierKeys.Control)) {
+                e.Handled = true;
+                var itemsModel = this.cItemList.SelectedItem as ItemModel;
+                MyLibUtil.RunApplication(itemsModel.FilePath, false);
+            } else if (e.Key == Key.C && IsModifierPressed(ModifierKeys.Control) && IsModifierPressed(ModifierKeys.Shift)) {
+                Clipboard.SetText(model.User);
+            } else if (e.Key == Key.X && IsModifierPressed(ModifierKeys.Control) && IsModifierPressed(ModifierKeys.Shift)) {
+                Clipboard.SetText(model.Password);
+            } else if (e.Key == Key.V && IsModifierPressed(ModifierKeys.Control)) {
+                e.Handled = true;
+                Task.Run(() => {
+                    System.Threading.Thread.Sleep(200);
+                    _findSelf = false;
+                    NativeMethods.EnumWindows(new NativeMethods.EnumWindowsDelegate(EnumWindowCallBack), IntPtr.Zero);
+                });
             }
             if (updateOrder) {
                 using (var table = new ItemsTable(this._profileDatabase)) {
