@@ -1,0 +1,142 @@
+﻿<Window x:Class="MySimpleLauncher.UI.MySimpleLauncherMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:u="clr-namespace:MySimpleLauncher.Component"
+        Title="MySimpleLauncher" Height="350" Width="500" WindowStartupLocation="CenterScreen" 
+        Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" KeyDown="MySimpleLauncherMain_KeyDown" Closed="MySimpleLauncherMain_Closed" WindowState="Minimized">
+    <Window.Resources>
+        <ResourceDictionary>
+            <u:WidthConverter x:Key="widthConverter"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/MySimpleLauncher;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="150" Width="150"/>
+            <ColumnDefinition Width="2"/>
+            <ColumnDefinition Width="318*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Name="cAppMenu" Visibility="Collapsed">
+            <MenuItem Header="File(_F)">
+                <MenuItem Header="Exit(_X)" Click="FileMenuExit_Click"/>
+            </MenuItem>
+            <MenuItem Header="Display(_D)">
+                <MenuItem IsCheckable="True" Header="Show StatusBar" Click="DisplayMenuShowStatusBar_Click" Name="cDisplayMenuShowStatusBar" />
+            </MenuItem>
+        </Menu>
+        
+        <StackPanel Grid.Row="1" Grid.Column="0" Background="#DEE7FF" >
+            <Button Content="No Profile" IsTabStop="False" Style="{StaticResource LabelButton}" Height="50" Click="ProfileList_Click" Name="cProfileList" />
+        </StackPanel>
+        <ListView Grid.Row="2" Name="cCategoryList" Grid.Column="0"  Height="Auto" ItemsSource="{Binding}" 
+                  ContextMenuOpening="CategoryList_ContextMenuOpening" SelectionChanged="CategoryList_SelectionChanged" KeyDown="CategoryList_KeyDown" SelectionMode="Single"> 
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" Padding="5" FontSize="{StaticResource DefaultFonSize}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle >
+                <Style TargetType="ListViewItem" >
+                    <Setter Property="OverridesDefaultStyle" Value="True"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ContentControl}">
+                                <Border BorderBrush="Transparent" BorderThickness="1" Background="{TemplateBinding Background}">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True" >
+                            <Setter Property="Background" Value="#FFE6E0E0" />
+                            <Setter Property="BorderBrush" Value="#FFE6E0E0" />
+                            <Setter Property="Foreground" Value="{StaticResource DefaultTextForeground}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True" >
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+        
+        <GridSplitter Grid.Column="1" Grid.Row="1" Width="5" HorizontalAlignment="Center" Grid.RowSpan="2"/>
+
+
+        <ListView Name="cItemList" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}"  
+                  SelectionMode="Single"
+                  ContextMenuOpening="ItemList_ContextMenuOpening" AllowDrop="True" Drop="ItemList_Drop" 
+                  MouseDoubleClick="ItemList_MouseDoubleClick" KeyDown="ItemList_KeyDown" SelectionChanged="ItemList_SelectionChanged" >
+            <ListView.ItemContainerStyle >
+                <Style TargetType="ListViewItem" >
+                    <Setter Property="OverridesDefaultStyle" Value="True"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ContentControl}">
+                                <Border BorderBrush="Transparent" BorderThickness="1" Background="{TemplateBinding Background}">
+                                    <GridViewRowPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True" >
+                            <Setter Property="Background" Value="#FFE6E0E0" />
+                            <Setter Property="BorderBrush" Value="#FFE6E0E0" />
+                            <Setter Property="Foreground" Value="{StaticResource DefaultTextForeground}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True" >
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="30" HeaderContainerStyle="{StaticResource GridViewColumnHeaderDisabledStyle}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid VerticalAlignment="Bottom" >
+                                    <u:CustomImage Source="{Binding IconSource}" Height="30" HorizontalAlignment="Stretch" Stretch="Uniform" VerticalAlignment="Stretch" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="{Binding ElementName=cItemList, Path=ActualWidth, Converter={StaticResource widthConverter}, ConverterParameter=3}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                        <GridViewColumnHeader Content="DisplayName" FontSize="{StaticResource DefaultFonSize}"  Padding="5" Click="ItemListHeader_Click" />
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" Padding="5" FontSize="{StaticResource DefaultFonSize}" 
+                                               Width="{Binding ElementName=cItemList, Path=ActualWidth, Converter={StaticResource widthConverter}, ConverterParameter=3}" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StatusBar Grid.Row="3" Grid.ColumnSpan="3" Height="23" HorizontalAlignment="Stretch" Name="cFileStatus" VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="cFileInfo" />
+            </StatusBarItem>
+        </StatusBar>
+
+    </Grid>
+</Window>
