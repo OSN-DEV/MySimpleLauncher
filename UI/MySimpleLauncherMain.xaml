@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:u="clr-namespace:MySimpleLauncher.Component"
         Title="MySimpleLauncher" Height="350" Width="500" WindowStartupLocation="CenterScreen" 
-        Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" KeyDown="MySimpleLauncherMain_KeyDown" Closed="MySimpleLauncherMain_Closed">
+        Closing="MySimpleLauncherMain_Closing" Loaded="MySimpleLauncherMain_Loaded" KeyDown="MySimpleLauncherMain_KeyDown" Closed="MySimpleLauncherMain_Closed" WindowState="Minimized">
     <Window.Resources>
         <ResourceDictionary>
             <u:WidthConverter x:Key="widthConverter"/>
