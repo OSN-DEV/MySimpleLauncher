@@ -143,11 +143,13 @@ namespace MySimpleLauncher.Component {
                                         stream,
                                         BitmapCreateOptions.PreservePixelFormat,
                                         BitmapCacheOption.OnLoad);
-                    var writable = new WriteableBitmap(bitmapDecoder.Frames.Single());
+                    // var writable = new WriteableBitmap(bitmapDecoder.Frames.Single());
+                    var writable = new WriteableBitmap(bitmapDecoder.Frames.First());
                     writable.Freeze();
                     bitmapSource = (BitmapSource)writable;
                 }
-            } catch {
+            } catch (Exception ex) {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
             return bitmapSource;
         }
