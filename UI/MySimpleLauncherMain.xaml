@@ -134,7 +134,7 @@
 
         <StatusBar Grid.Row="3" Grid.ColumnSpan="3" Height="23" HorizontalAlignment="Stretch" Name="cFileStatus" VerticalAlignment="Bottom">
             <StatusBarItem>
-                <TextBlock Name="cFileInfo" />
+                <TextBlock Name="cFileInfo" FontSize="10" />
             </StatusBarItem>
         </StatusBar>
 
