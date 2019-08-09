@@ -62,7 +62,7 @@
                     <u:CustomTextBox Grid.Column="2" Grid.Row="4" Text="{Binding Password,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="20" Width="200"  />
 
                     <TextBlock       Grid.Column="0" Grid.Row="5" Text="Comment" />
-                    <u:CustomTextBox Grid.Column="2" Grid.Row="5" Text="{Binding Comment,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="WrapWithOverflow" MaxLines="3" MinLines="3" MaxLength="200" HorizontalAlignment="Stretch" Height="50" Style="{StaticResource TextAreaStyle}" />
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="5" Text="{Binding Comment,UpdateSourceTrigger=PropertyChanged}" ImeMode="Hiragana" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="WrapWithOverflow" MaxLines="3" MinLines="3" MaxLength="200" HorizontalAlignment="Stretch" Height="50" BorderThickness="1" />
                 </Grid>
 
             </TabItem>
