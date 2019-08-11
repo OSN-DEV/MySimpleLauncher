@@ -50,7 +50,7 @@
                     </StackPanel>
 
                     <TextBlock       Grid.Column="0" Grid.Row="1" Text="Display Name"/>
-                    <u:CustomTextBox Grid.Column="2" Grid.Row="1" Text="{Binding DisplayName,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="20" Width="200" x:Name="cDisplayName" TextChanged="DisplayName_TextChanged"/>
+                    <u:CustomTextBox Grid.Column="2" Grid.Row="1" Text="{Binding DisplayName,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="60" HorizontalAlignment="Stretch"  x:Name="cDisplayName" TextChanged="DisplayName_TextChanged"/>
 
                     <TextBlock       Grid.Column="0" Grid.Row="2" Text="Path"  />
                     <u:CustomTextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap"  Text="{Binding FilePath,UpdateSourceTrigger=PropertyChanged}" ImeMode="Off" MaxLength="256" HorizontalAlignment="Stretch" TextValueChanged="FilePath_TextValueChanged" x:Name="cFilePath"/>
