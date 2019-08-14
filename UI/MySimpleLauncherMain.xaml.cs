@@ -60,6 +60,7 @@ namespace MySimpleLauncher.UI {
             this.SetUpNotifyIcon();
             this._settings = AppSettings.GetInstance();
             this._settings.Load();
+            this.Title = AppCommon.GetAppName();
             _self = this;
             _assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 

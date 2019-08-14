@@ -31,5 +31,16 @@ namespace MySimpleLauncher.Util {
         public static void ShowErrorMsg(string message) {
             MessageBox.Show(message, "error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
+        /// <summary>
+        /// get app name
+        /// </summary>
+        /// <returns></returns>
+        public static string GetAppName() {
+            var fullname = typeof(App).Assembly.Location;
+            var info = System.Diagnostics.FileVersionInfo.GetVersionInfo(fullname);
+            var ver = info.FileVersion;
+            return "MySimpleLauncher(" + ver + ")";
+        }
     }
 }
