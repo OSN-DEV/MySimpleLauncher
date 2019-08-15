@@ -75,6 +75,23 @@ namespace MySimpleLauncher.UI {
                                       }
                                   }
                                   );
+
+            if (0 <= this._settings.WindowPosX && (this._settings.WindowPosX + this._settings.WindowSizeW) < SystemParameters.VirtualScreenWidth) {
+                this.Left = this._settings.WindowPosX;
+            }
+            if (0 <= this._settings.WindowPosY && (this._settings.WindowPosY + this._settings.WindowSizeH) < SystemParameters.VirtualScreenHeight) {
+                this.Top = this._settings.WindowPosY;
+            }
+            if (0 < this._settings.WindowSizeW && this._settings.WindowSizeW <= SystemParameters.WorkArea.Width) {
+                this.Width = this._settings.WindowSizeW;
+            }
+            if (0 < this._settings.WindowSizeH && this._settings.WindowSizeH <= SystemParameters.WorkArea.Height) {
+                this.Height = this._settings.WindowSizeH;
+            }
+            if (0 < this._settings.CategoryListW && this._settings.CategoryListW < this.Width) {
+                this.cMainGrid.ColumnDefinitions[0].Width = new GridLength(this._settings.CategoryListW);
+                // this.cCategoryList.Width = this._settings.CategoryListW;
+            }
         }
         #endregion
 
@@ -128,6 +145,13 @@ namespace MySimpleLauncher.UI {
             if (!this._allowClosing) {
                 e.Cancel = true;
                 this.SetWindowsState(true);
+            } else {
+                this._settings.WindowPosX = this.Left;
+                this._settings.WindowPosY = this.Top;
+                this._settings.WindowSizeW = this.Width;
+                this._settings.WindowSizeH = this.Height;
+                this._settings.CategoryListW = this.cCategoryList.ActualWidth;
+                this._settings.Save();
             }
         }
 

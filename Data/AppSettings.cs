@@ -8,6 +8,12 @@ namespace MySimpleLauncher.Data {
         public int CategoryListSelectedIndex { set; get; } = -1;
         public bool ShowStatusBar { set; get; }
 
+        public double WindowPosX { set; get; } = -1;
+        public double WindowPosY { set; get; } = -1;
+        public double WindowSizeW { set; get; } = -1;
+        public double WindowSizeH { set; get; } = -1;
+        public double CategoryListW { set; get; } = -1;
+
         private readonly string _settingFile = AppCommon.GetAppPath() + @"\app.settings";
         #endregion
 
@@ -21,6 +27,11 @@ namespace MySimpleLauncher.Data {
                 this.CurrentProfileId = instance.CurrentProfileId;
                 this.CategoryListSelectedIndex = instance.CategoryListSelectedIndex;
                 this.ShowStatusBar = instance.ShowStatusBar;
+                this.WindowPosX = instance.WindowPosX;
+                this.WindowPosY = instance.WindowPosY;
+                this.WindowSizeW = instance.WindowSizeW;
+                this.WindowSizeH = instance.WindowSizeH;
+                this.CategoryListW = instance.CategoryListW;
             }
         }
 

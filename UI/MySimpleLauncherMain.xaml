@@ -15,7 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="cMainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="150" Width="150"/>
             <ColumnDefinition Width="2"/>
