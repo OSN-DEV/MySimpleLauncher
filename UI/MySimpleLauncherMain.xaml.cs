@@ -354,6 +354,7 @@ namespace MySimpleLauncher.UI {
                     }
                     this._profileDatabase.CommitTrans();
                 }
+                this._categoryList.Remove(model);
             } finally {
                 this._profileDatabase.RollbackTrans();
                 this._profileDatabase.Close();

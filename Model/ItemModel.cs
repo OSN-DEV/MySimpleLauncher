@@ -65,7 +65,7 @@ namespace MySimpleLauncher.Model {
         public BitmapSource IconSource {
             set { }
             get {
-                if (null == this._icon) {
+                if (null == this._icon || 0 == this._icon.Length) {
                     return null;
                 } else {
                     try {
@@ -80,7 +80,8 @@ namespace MySimpleLauncher.Model {
                             writable.Freeze();
                             return (BitmapSource)writable;
                         }
-                    } catch {
+                    } catch (Exception ex) {
+                        System.Diagnostics.Debug.WriteLine(ex.Message);
                         return null;
                     }
                 }
