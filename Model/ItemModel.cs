@@ -75,7 +75,8 @@ namespace MySimpleLauncher.Model {
                                                 stream,
                                                 BitmapCreateOptions.PreservePixelFormat,
                                                 BitmapCacheOption.OnLoad);
-                            var writable = new WriteableBitmap(bitmapDecoder.Frames.Single());
+                            //                             var writable = new WriteableBitmap(bitmapDecoder.Frames.Single());
+                            var writable = new WriteableBitmap(bitmapDecoder.Frames.First());
                             writable.Freeze();
                             return (BitmapSource)writable;
                         }
