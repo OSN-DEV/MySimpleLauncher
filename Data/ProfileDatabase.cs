@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySimpleLauncher.Util;
 using MyLib.Data.Sqlite;
+using MyLib.File;
 
 namespace MySimpleLauncher.Data {
     internal class ProfileDatabase : Database {
@@ -16,10 +17,22 @@ namespace MySimpleLauncher.Data {
 
         };
         private delegate List<SqlBuilder> CreateSqls();
+        private string _password = "";
         #endregion
 
         #region Constructor
         public ProfileDatabase(string database) : base(database, (int)DbVersion.Current) {
+            using (var key = new FileOperator(AppCommon.GetAppPath() + "key")) { 
+                if (key.Exists()) {
+                    key.OpenForRead();
+                    this._password = key.ReadLine();
+                    base.SetPassWord(this._password);
+                }
+            }
+        }
+
+        public override void Open() {
+            base.Open(this._password);
         }
         #endregion
 
