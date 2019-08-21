@@ -63,6 +63,8 @@ namespace MySimpleLauncher.UI {
 
         private void Edit_Click(object sender, RoutedEventArgs e) {
             this._model.IsReadOnly = false;
+            var model = this.DataContext as ItemModel;
+            model.IsReadOnly = false;
             this.cEdit.Visibility = Visibility.Hidden;
             this.cOK.Visibility = Visibility.Visible;
         }
