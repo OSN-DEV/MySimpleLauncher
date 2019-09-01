@@ -428,6 +428,34 @@ namespace MySimpleLauncher.Data {
         }
 
         /// <summary>
+        /// select max row_order
+        /// </summary>
+        /// <param name="categoryId"></param>
+        internal int SelectMaxRowOrderByCategoryId(long categoryId) {
+            int rowOrder = 0;
+            var sql = new SqlBuilder();
+            sql.AppendSql("SELECT ")
+                .AppendSql(" row_order")
+                .AppendSql("FROM items")
+                .AppendSql("WHERE category_id = @category_id")
+                .AppendSql("ORDER BY row_order desc")
+                .AppendSql("        ,id");
+            this.OpenDatabase();
+
+            var paramList = new ParameterList();
+            paramList.Add("@category_id", categoryId);
+
+            this.OpenDatabase();
+            base._record = base.Database.OpenRecordset(sql, paramList);
+            if (base._record.Read()) {
+                rowOrder = base._record.GetInt(0);
+            }
+            base._record.Close();
+            base.Database.Close();
+            return rowOrder + 1;
+        }
+
+        /// <summary>
         /// delete by id
         /// </summary>
         /// <param name="id">id</param>

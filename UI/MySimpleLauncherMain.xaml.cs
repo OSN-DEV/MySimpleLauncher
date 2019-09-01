@@ -13,7 +13,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace MySimpleLauncher.UI {
@@ -41,6 +43,9 @@ namespace MySimpleLauncher.UI {
         private readonly HotKeyHelper _hotkey;
         private bool _allowClosing = false;
         private bool _orderDeschend = false;
+
+        private Point _itemDragStartPos = new Point();
+        private const string DragItem = "DragItem";
 
         /// <summary>
         /// Id for context menu
@@ -301,6 +306,47 @@ namespace MySimpleLauncher.UI {
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CategoryList_DragEnter(object sender, DragEventArgs e) {
+            if (!e.Data.GetDataPresent(DragItem) || sender == e.Source) {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CategoryList_Drop(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DragItem)) {
+                int index = GetCurrentIndex(e.GetPosition);
+                if (-1 == index) {
+                    return;
+                }
+                var category = this._categoryList[index];
+                var item = e.Data.GetData(DragItem) as ItemModel;
+                item.CategoryId = category.Id;
+
+                using (var table = new ItemsTable(this._profileDatabase)) {
+                    item.RowOrder = table.SelectMaxRowOrderByCategoryId(item.CategoryId);
+                    int count = table.UpdateById(item);
+                    if (count <= 0) {
+                        AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToUpdate, "item"));
+                        return;
+                    }
+                    this._itemList.Remove(item);
+                }
+            }
+        }
+
+
+
+
+        /// <summary>
         /// category context menu add click
         /// </summary>
         /// <param name="sender"></param>
@@ -519,6 +565,11 @@ namespace MySimpleLauncher.UI {
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ItemList_Drop(object sender, DragEventArgs e) {
             if (!(e.Data.GetData(DataFormats.FileDrop) is string[] files)) {
                 return;
@@ -561,6 +612,11 @@ namespace MySimpleLauncher.UI {
             MyLibUtil.RunApplication(model.FilePath, false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ItemList_KeyDown(object sender, KeyEventArgs e) {
             var selectedIndex = this.cItemList.SelectedIndex;
             ItemModel model = null;
@@ -633,6 +689,32 @@ namespace MySimpleLauncher.UI {
                     status.Append("Size : " + util.FileSizeString);
                 }
                 this.cFileInfo.Text = status.ToString();
+            }
+        }
+
+        private void ItemList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            // https://sites.google.com/site/toriaezunomemo/home/visual-studiomemo/wpf-tutorial-drag-drop
+            this._itemDragStartPos = e.GetPosition(null);
+        }
+
+        private void ItemList_MouseMove(object sender, MouseEventArgs e) {
+            var diff = this._itemDragStartPos = e.GetPosition(null);
+            if (e.LeftButton == MouseButtonState.Pressed &&
+                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)) {
+                // Get the dragged ListViewItem
+                ListView listView = sender as ListView;
+                ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
+
+                if (null == listViewItem) {
+                    return;
+                }
+                // Find the data behind the ListViewItem
+                var item = (ItemModel)listView.ItemContainerGenerator.ItemFromContainer(listViewItem);
+
+                // Initialize the drag & drop operation
+                DataObject dragData = new DataObject(DragItem, item);
+                DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
             }
         }
 
@@ -800,7 +882,7 @@ namespace MySimpleLauncher.UI {
 
                 if (_findSelf) {
                     _self.Dispatcher.BeginInvoke(new Action(() => {
-                    _self.SendKey(hWnd);
+                        _self.SendKey(hWnd);
                     }));
 
                     _findSelf = false;
@@ -847,6 +929,51 @@ namespace MySimpleLauncher.UI {
                 this.Activate();
             }
         }
+
+        /// <summary>
+        /// find listview item
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="current"></param>
+        /// <returns></returns>
+        private static T FindAnchestor<T>(DependencyObject current) where T : DependencyObject {
+            do {
+                if (current is T) {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            } while (current != null);
+            return null;
+        }
+
+
+        // http://holstcoding.blogspot.com/2010/08/wpf-get-item-in-listview-under-mouse.html
+        delegate Point GetPositionDelegate(IInputElement element);
+        private int GetCurrentIndex(GetPositionDelegate getPosition) {
+            int index = -1;
+            for (int i = 0; i < this.cCategoryList.Items.Count; i++) {
+                ListViewItem item = GetListViewItem(i);
+                if (item == null)
+                    continue;
+                if (IsMouseOverTarget(item, getPosition)) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        }
+        private ListViewItem GetListViewItem(int index) {
+            if (this.cCategoryList.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+                return null;
+            return this.cCategoryList.ItemContainerGenerator.ContainerFromIndex(index) as ListViewItem;
+        }
+        private bool IsMouseOverTarget(Visual target, GetPositionDelegate getPosition) {
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
+            Point mousePos = getPosition((IInputElement)target);
+            return bounds.Contains(mousePos);
+        }
+
         #endregion
+
     }
 }
