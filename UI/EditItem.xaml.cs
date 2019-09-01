@@ -29,6 +29,8 @@ namespace MySimpleLauncher.UI {
         private EditItem() {
             InitializeComponent();
             this._browser.DocumentCompleted += Browser_DocumentCompleted;
+            this._browser.ScriptErrorsSuppressed = true;
+
         }
 
         internal EditItem(Window owner, bool isReadOnly = false, ItemModel model = null) : this() {
