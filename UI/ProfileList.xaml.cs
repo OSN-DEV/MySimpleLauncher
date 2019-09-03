@@ -84,8 +84,9 @@ namespace MySimpleLauncher.UI {
                 return;
             }
             profile.Delete();
-            using (var database = new Database(profile.FilePath)) {
+            using (var database = new ProfileDatabase(profile.FilePath)) {
                 try {
+                    database.SetPassWord(ProfileDatabase.Password);
                     database.Open();
                     database.BeginTrans();
                     if (database.ExecuteNonQuery(CategoriesTable.CreateTable()) < 0) {

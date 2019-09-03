@@ -10,6 +10,8 @@ using MyLib.File;
 namespace MySimpleLauncher.Data {
     internal class ProfileDatabase : Database {
         #region Declaration
+        public static string Password = "";
+
         private enum DbVersion {
             Ver00 = 0,
             Ver01 = 1,
@@ -17,22 +19,14 @@ namespace MySimpleLauncher.Data {
 
         };
         private delegate List<SqlBuilder> CreateSqls();
-        private string _password = "";
         #endregion
 
         #region Constructor
         public ProfileDatabase(string database) : base(database, (int)DbVersion.Current) {
-            using (var key = new FileOperator(AppCommon.GetAppPath() + "key")) { 
-                if (key.Exists()) {
-                    key.OpenForRead();
-                    this._password = key.ReadLine();
-                    base.SetPassWord(this._password);
-                }
-            }
         }
 
         public override void Open() {
-            base.Open(this._password);
+            base.Open(Password);
         }
         #endregion
 

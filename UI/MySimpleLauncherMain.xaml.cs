@@ -61,6 +61,14 @@ namespace MySimpleLauncher.UI {
         #region Constructor
         public MySimpleLauncherMain() {
             InitializeComponent();
+
+            using (var key = new FileOperator(AppCommon.GetAppPath() + "key")) {
+                if (key.Exists()) {
+                    key.OpenForRead();
+                    ProfileDatabase.Password = key.ReadLine();
+                }
+            }
+
             this.CreateContextMenu();
             this.SetUpNotifyIcon();
             this._settings = AppSettings.GetInstance();
