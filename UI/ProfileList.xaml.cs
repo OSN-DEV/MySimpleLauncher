@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using MyLib.Data.Sqlite;
 using MyLib.File;
 using MySimpleLauncher.Data;
 using MySimpleLauncher.Model;
@@ -20,7 +19,7 @@ namespace MySimpleLauncher.UI {
     public partial class ProfileList : Window {
         #region Declaration
         private ObservableCollection<ProfileModel> _model;
-        private List<ProfileModel> _deleteModels = new List<ProfileModel>();
+        private readonly List<ProfileModel> _deleteModels = new List<ProfileModel>();
 
         internal ProfileModel CurrentModel {
             get; private set;
@@ -71,11 +70,12 @@ namespace MySimpleLauncher.UI {
         }
 
         private void Create_Click(object sender, RoutedEventArgs e) {
-            var dialog = new SaveFileDialog();
-            dialog.FileName = "profile.db";
-            dialog.Filter = "db ファイル|*.db";
-            dialog.FilterIndex = 0;
-            dialog.AddExtension = true;
+            var dialog = new SaveFileDialog {
+                FileName = "profile.db",
+                Filter = "db ファイル|*.db",
+                FilterIndex = 0,
+                AddExtension = true
+            };
             if (true != dialog.ShowDialog()) {
                 return;
             }
@@ -110,10 +110,11 @@ namespace MySimpleLauncher.UI {
         }
 
         private void Open_Click(object sender, RoutedEventArgs e) {
-            var dialog = new OpenFileDialog();
-            dialog.Filter = "db ファイル|*.db";
-            dialog.FilterIndex = 0;
-            dialog.Title = "プロファイルを選択";
+            var dialog = new OpenFileDialog {
+                Filter = "db ファイル|*.db",
+                FilterIndex = 0,
+                Title = "プロファイルを選択"
+            };
             if (true != dialog.ShowDialog()) {
                 return;
 
@@ -200,9 +201,10 @@ namespace MySimpleLauncher.UI {
         /// <param name="profile">profile information</param>
         /// <returns>true:success, false:otherwise</returns>
         private bool InsertProfile(FileOperator profile) {
-            var model = new ProfileModel();
-            model.FilePath = profile.FilePath;
-            model.DisplayName = profile.NameWithoutExtension;
+            var model = new ProfileModel {
+                FilePath = profile.FilePath,
+                DisplayName = profile.NameWithoutExtension
+            };
             var table = new ProfilesTable();
 
             var result = false;

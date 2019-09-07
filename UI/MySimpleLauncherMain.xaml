@@ -30,6 +30,8 @@
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Name="cAppMenu" Visibility="Collapsed">
             <MenuItem Header="File(_F)">
+                <MenuItem Header="BackupProfile(_C)" Click="FileMenuCopy_Click"/>
+                <Separator />
                 <MenuItem Header="Exit(_X)" Click="FileMenuExit_Click"/>
             </MenuItem>
             <MenuItem Header="Display(_D)">

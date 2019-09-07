@@ -178,6 +178,19 @@ namespace MySimpleLauncher.UI {
         }
 
         /// <summary>
+        /// [File] - [BackupProfile]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FileMenuCopy_Click(object sender, RoutedEventArgs e) {
+            if (0 < this._currentProfile?.FilePath.Length) {
+                var dest = this._currentProfile.FilePath + ".bkp";
+                System.IO.File.Copy(this._currentProfile.FilePath, dest, true);
+                this.cAppMenu.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        /// <summary>
         /// [File] - [Exit]
         /// </summary>
         /// <param name="sender"></param>
