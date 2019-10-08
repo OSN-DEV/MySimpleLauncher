@@ -630,7 +630,9 @@ namespace MySimpleLauncher.UI {
             if (!(cItemList.GetItemAt(Mouse.GetPosition(this.cItemList))?.DataContext is ItemModel model)) {
                 return;
             }
-            MyLibUtil.RunApplication(model.FilePath, false);
+           if (!MyLibUtil.RunApplication(model.FilePath, false)) {
+                AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToLaunch, model.FilePath));
+            }
         }
 
         /// <summary>

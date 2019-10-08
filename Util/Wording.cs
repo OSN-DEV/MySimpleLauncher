@@ -19,6 +19,7 @@ namespace MySimpleLauncher.Util {
         internal static string FailToUpdate = "fail to update {0}.";
         internal static string FailToCreate = "fail to create {0}.";
         internal static string UnExpectedError = "UnExpected error occurred.";
+        internal static string FailToLaunch = "fail to launch {0}.";
     }
 
     internal static class ConfirmMsg {
