@@ -84,6 +84,9 @@ namespace MySimpleLauncher.UI {
                                       if (!this.ShowInTaskbar) {
                                           NotifyMenuShow_Click(null, null);
                                       } else {
+                                          if (this.WindowState == WindowState.Minimized) {
+                                              this.WindowState = WindowState.Normal;
+                                          }
                                           this.Activate();
                                       }
                                   }
