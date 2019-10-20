@@ -42,7 +42,7 @@ namespace MySimpleLauncher.UI {
         private delegate bool SendVKeyNativeDelegate(uint keyStroke, NativeMethods.KeySet keyset);
         private readonly HotKeyHelper _hotkey;
         private bool _allowClosing = false;
-        private bool _orderDeschend = false;
+        private bool _orderDescend = false;
 
         private Point _itemDragStartPos = new Point();
         private const string DragItem = "DragItem";
@@ -326,7 +326,7 @@ namespace MySimpleLauncher.UI {
             this._settings.CategoryListSelectedIndex = this.cCategoryList.SelectedIndex;
             this._settings.Save();
             this._itemMenu.IsEnabled = true;
-            this._orderDeschend = false;
+            this._orderDescend = false;
         }
 
         /// <summary>
@@ -366,9 +366,6 @@ namespace MySimpleLauncher.UI {
                 }
             }
         }
-
-
-
 
         /// <summary>
         /// category context menu add click
@@ -557,17 +554,23 @@ namespace MySimpleLauncher.UI {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ItemListHeader_Click(object sender, RoutedEventArgs e) {
-            if (this._orderDeschend) {
-                this._itemList = new ObservableCollection<ItemModel>(this._itemList.OrderByDescending(n => n.DisplayName));
+            var header = (GridViewColumnHeader)sender;
+            if (0 == header.Content.ToString().Length) {
+                this._itemList = new ObservableCollection<ItemModel>(this._itemList.OrderBy(n => n.RowOrder));
+                this._orderDescend = false;
             } else {
-                this._itemList = new ObservableCollection<ItemModel>(this._itemList.OrderBy(n => n.DisplayName));
-            }
-            using (var table = new ItemsTable(this._profileDatabase)) {
-                if (table.UpdateRowOrdersByIds(this._itemList) == 0) {
-                    AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToUpdate, "item"));
+                if (this._orderDescend) {
+                    this._itemList = new ObservableCollection<ItemModel>(this._itemList.OrderByDescending(n => n.DisplayName));
+                } else {
+                    this._itemList = new ObservableCollection<ItemModel>(this._itemList.OrderBy(n => n.DisplayName));
                 }
+                this._orderDescend = !this._orderDescend;
             }
-            this._orderDeschend = !this._orderDeschend;
+            //using (var table = new ItemsTable(this._profileDatabase)) {
+            //    if (table.UpdateRowOrdersByIds(this._itemList) == 0) {
+            //        AppCommon.ShowErrorMsg(string.Format(ErrorMsg.FailToUpdate, "item"));
+            //    }
+            //}
             this.cItemList.DataContext = this._itemList;
         }
 
@@ -691,7 +694,7 @@ namespace MySimpleLauncher.UI {
                     } else {
                         this.cItemList.SelectedIndex = selectedIndex;
                     }
-                    this._orderDeschend = false;
+                    this._orderDescend = false;
                 }
             }
         }

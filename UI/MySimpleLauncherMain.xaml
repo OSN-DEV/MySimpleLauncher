@@ -114,6 +114,7 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="30" HeaderContainerStyle="{StaticResource GridViewColumnHeaderDisabledStyle}">
+                        <GridViewColumnHeader Content="" FontSize="{StaticResource DefaultFonSize}"  Padding="5" Click="ItemListHeader_Click" />
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid VerticalAlignment="Bottom" >
