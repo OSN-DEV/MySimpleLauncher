@@ -92,7 +92,12 @@ namespace MySimpleLauncher.UI {
             if (0 < this.cFilePath.Text.Length && this.cFilePath.Text.StartsWith("http")) {
                 if (!this._loadingIcon) {
                     this._loadingIcon = true;
-                    this._browser.Navigate(this.cFilePath.Text);
+                    try {
+                        this._browser.Navigate(this.cFilePath.Text);
+                    } catch (Exception ex) {
+                        this._loadingIcon = false;
+                        MessageBox.Show("パスの読込に失敗しました。\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             } else if (0 < this.cFilePath.Text.Length && File.Exists(this.cFilePath.Text)) {
                 this.cIcon.SetAppIcon(this.cFilePath.Text);
