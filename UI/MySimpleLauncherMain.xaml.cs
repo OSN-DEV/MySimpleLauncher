@@ -774,9 +774,9 @@ namespace MySimpleLauncher.UI {
 
             var model = this.cItemList.SelectedItem as ItemModel;
             var sendStrings = new StringBuilder();
-            sendStrings.Append(model.User)
+            sendStrings.Append(this.EscapeSendValue(model.User))
                 .Append("{TAB}")
-                .Append(model.Password);
+                .Append(this.EscapeSendValue(model.Password));
             System.Windows.Forms.SendKeys.SendWait(sendStrings.ToString());
             DoEvents();
             System.Windows.Forms.SendKeys.SendWait("{ENTER}");
@@ -785,6 +785,26 @@ namespace MySimpleLauncher.UI {
         #endregion
 
         #region Private Method
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static readonly string[] Symbols = { "+", "^", "!", "(", ")", "[", "]", "~" };
+        private string EscapeSendValue(string value) {
+            var result = new StringBuilder();
+            for (int i=0; i < value.Length; i++) {
+                var s = value.Substring(i, 1);
+                if (Symbols.Contains(s)) {
+                    result.Append("{" + s + "}");
+                } else {
+                    result.Append(s);
+                }
+            }
+            return result.ToString();
+        }
+
+
         /// <summary>
         /// Create context menu for CategoryList
         /// </summary>
